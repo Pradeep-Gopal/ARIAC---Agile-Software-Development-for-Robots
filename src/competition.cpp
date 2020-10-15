@@ -1,5 +1,7 @@
 #include "competition.h"
 #include "utils.h"
+#include <nist_gear/LogicalCameraImage.h>
+#include <nist_gear/Order.h>
 
 #include <std_srvs/Trigger.h>
 ////////////////////////////////////////////////////
@@ -8,6 +10,8 @@ Competition::Competition(ros::NodeHandle & node): current_score_(0)
 {
   node_ = node;
 }
+
+
 
 void Competition::init() {
   // Subscribe to the '/ariac/current_score' topic.
@@ -32,6 +36,76 @@ void Competition::init() {
 
   init_.total_time += ros::Time::now().toSec() - time_called;
 
+}
+
+void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx)
+{
+    tf2_ros::Buffer tfBuffer;
+    tf2_ros::TransformListener tfListener(tfBuffer);
+    std::ostringstream otopic;
+    std::string topic;
+    geometry_msgs::PoseStamped pose_target, pose_rel;
+    if(msg->models.size() != 0){
+
+        // ROS_INFO_STREAM("Camera_id : " << cam_idx);
+        // ROS_INFO_STREAM("Logical camera: '" << msg->models.size() << "' objects.");
+        int part_no = 0;
+        ROS_INFO_STREAM("Parts detected by Logical camera " << cam_idx);
+        ROS_INFO_STREAM(" ");
+        for(int i = 0; i<msg->models.size(); i++)
+        {
+            part_no++;
+            otopic.str("");
+            otopic.clear();
+            otopic << "logical_camera_" << cam_idx << "_" << msg->models[i].type<< "_frame";
+            topic = otopic.str();
+            // ROS_INFO_STREAM(topic);
+            ros::Duration timeout(5.0);
+            geometry_msgs::TransformStamped transformStamped;
+            pose_rel.header.frame_id = "logical_camera_" + std::to_string(cam_idx) + "_frame";
+            pose_rel.pose = msg->models[i].pose;
+
+            try{
+                transformStamped = tfBuffer.lookupTransform("world", pose_rel.header.frame_id,
+                                                            ros::Time(0), timeout);
+            }
+            catch (tf2::TransformException &ex) {
+                ROS_WARN("%s",ex.what());
+                ros::Duration(1.0).sleep();
+                continue;
+            }
+            tf2::doTransform(pose_rel, pose_target, transformStamped);
+            // ROS_INFO_STREAM("Camera coordinates of " << topic << " no of parts - " << msg->models.size());
+            // ROS_INFO_STREAM(pose_target);
+
+            double tx = pose_target.pose.position.x;
+            double ty = pose_target.pose.position.y;
+            double tz = pose_target.pose.position.z;
+
+            // Orientation quaternion
+            tf2::Quaternion q(
+                    pose_target.pose.orientation.x,
+                    pose_target.pose.orientation.y,
+                    pose_target.pose.orientation.z,
+                    pose_target.pose.orientation.w);
+
+            // 3x3 Rotation matrix from quaternion
+            tf2::Matrix3x3 m(q);
+
+            // Roll Pitch and Yaw from rotation matrix
+            double roll, pitch, yaw;
+            m.getRPY(roll, pitch, yaw);
+
+            // Output the measure
+            ROS_INFO("'%s' in '%s' frame : X: %.2f Y: %.2f Z: %.2f - R: %.2f P: %.2f Y: %.2f",
+                     topic.c_str(),
+                     pose_target.header.frame_id.c_str(),
+                     tx, ty, tz,
+                     roll, pitch, yaw);
+        }
+        ROS_INFO_STREAM(" ");
+        ROS_INFO_STREAM(" ");
+    }
 }
 
 

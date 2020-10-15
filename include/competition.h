@@ -9,6 +9,7 @@
 #include <std_msgs/String.h>
 #include <rosgraph_msgs/Clock.h>
 #include <nist_gear/Order.h>
+#include <nist_gear/LogicalCameraImage.h>
 
 #include "utils.h"
 
@@ -28,6 +29,7 @@ public:
 
 
     void competition_state_callback(const std_msgs::String::ConstPtr & msg);
+    void logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx);
     void competition_clock_callback(const rosgraph_msgs::Clock::ConstPtr & msg);
     void order_callback(const nist_gear::Order::ConstPtr & msg);
     double getClock();

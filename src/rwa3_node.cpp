@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <vector>
-
 #include <ros/ros.h>
 
 #include <nist_gear/LogicalCameraImage.h>
@@ -36,6 +35,8 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 
+#define MAX_NUMER_OF_CAMERAS 17
+
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "rwa3_node");
     ros::NodeHandle node;
@@ -43,7 +44,25 @@ int main(int argc, char ** argv) {
     spinner.start();
 
     Competition comp(node);
+
+    //Array of Logical Camera Subscribers
+    ros::Subscriber logical_camera_subscriber_ [MAX_NUMER_OF_CAMERAS];
+    std::ostringstream otopic;
+    std::string topic;
+
+    for (int idx = 0; idx < MAX_NUMER_OF_CAMERAS; idx++){
+        otopic.str("");
+        otopic.clear();
+        otopic << "/ariac/logical_camera_" << idx;
+        topic = otopic.str();
+        logical_camera_subscriber_[idx] = node.subscribe<nist_gear::LogicalCameraImage>
+                (topic, 10, boost::bind(&Competition::logical_camera_callback, &comp, _1, idx));
+    }
+
+
     comp.init();
+
+
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
