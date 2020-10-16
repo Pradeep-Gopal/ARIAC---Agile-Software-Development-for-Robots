@@ -64,6 +64,13 @@ void Competition::fill_order() {
     }
     tot_order_size = received_orders_.size();
     vector< vector< vector<string> > > vec_container(tot_order_size , vector< vector<string> > (tot_shipment_size, vector<string> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_position_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_position_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_position_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_orientation_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_orientation_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_orientation_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_container_orientation_w(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
     // filling the vectors of orders, shipments and products
     for (int i = 0; i < tot_order_size; i++) {
         ROS_INFO_STREAM("Filling Orders ---------------- ----------");
@@ -75,6 +82,13 @@ void Competition::fill_order() {
                 ROS_INFO_STREAM("Filling Products --------------------------");
                 //fill in the vector here
                 vec_container[i][j][k] = received_orders_[i].shipments[j].products[k].type;
+                vec_container_position_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
+                vec_container_position_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.y;
+                vec_container_position_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.z ;
+                vec_container_orientation_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
+                vec_container_orientation_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.y;
+                vec_container_orientation_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.z;
+                vec_container_orientation_w[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.w;
             }
         }
     }
@@ -85,6 +99,13 @@ void Competition::fill_order() {
             for (int k = 0; k < tot_prod_size; k++) {
                 ROS_INFO_STREAM("DISPLAYING ALL  Products --------------------------");
                 ROS_INFO_STREAM(vec_container[i][j][k]);
+                ROS_INFO_STREAM(vec_container_position_x[i][j][k]);
+                ROS_INFO_STREAM(vec_container_position_y[i][j][k]);
+                ROS_INFO_STREAM(vec_container_position_z[i][j][k]);
+                ROS_INFO_STREAM(vec_container_orientation_x[i][j][k]);
+                ROS_INFO_STREAM(vec_container_orientation_y[i][j][k]);
+                ROS_INFO_STREAM(vec_container_orientation_z[i][j][k]);
+                ROS_INFO_STREAM(vec_container_orientation_w[i][j][k]);
             }
         }
     }
