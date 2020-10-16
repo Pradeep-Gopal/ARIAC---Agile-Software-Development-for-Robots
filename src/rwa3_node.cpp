@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <vector>
-
 #include <ros/ros.h>
 
 #include <nist_gear/LogicalCameraImage.h>
@@ -36,19 +35,34 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 
-#define MAX_NUMER_OF_CAMERAS 17
-
-
-struct Part mypart;
+#define MAX_NUMBER_OF_CAMERAS 17
 
 int main(int argc, char ** argv) {
+
     ros::init(argc, argv, "rwa3_node");
     ros::NodeHandle node;
     ros::AsyncSpinner spinner(8);
     spinner.start();
 
     Competition comp(node);
+
+    //Array of Logical Camera Subscribers
+    ros::Subscriber logical_camera_subscriber_ [MAX_NUMBER_OF_CAMERAS];
+    std::ostringstream otopic;
+    std::string topic;
+
+    for (int idx = 0; idx < MAX_NUMBER_OF_CAMERAS; idx++){
+        otopic.str("");
+        otopic.clear();
+        otopic << "/ariac/logical_camera_" << idx;
+        topic = otopic.str();
+        logical_camera_subscriber_[idx] = node.subscribe<nist_gear::LogicalCameraImage>
+                (topic, 10, boost::bind(&Competition::logical_camera_callback, &comp, _1, idx));
+    }
+
+
     comp.init();
+    comp.print_parts_detected();
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
@@ -58,22 +72,7 @@ int main(int argc, char ** argv) {
     gantry.goToPresetLocation(gantry.start_);
 
     //--1-Read order
-    ros::Subscriber orders_subscriber = node.subscribe(
-            "/ariac/orders", 10,
-            &Competition::order_callback, &comp);
     //--2-Look for parts in this order
-    //Array of Logical Camera Subscribers
-    ros::Subscriber logical_camera_subscriber_ [MAX_NUMER_OF_CAMERAS];
-    std::ostringstream otopic;
-    std::string topic;
-    for (int idx = 0; idx < MAX_NUMER_OF_CAMERAS; idx++){
-        otopic.str("");
-        otopic.clear();
-        otopic << "/ariac/logical_camera_" << idx;
-        topic = otopic.str();
-        logical_camera_subscriber_[idx] = node.subscribe<nist_gear::LogicalCameraImage>
-                (topic, 10, boost::bind(&Competition::logical_camera_callback, &comp, _1, idx));
-    }
     //--We go to this bin because a camera above
     //--this bin found one of the parts in the order
     gantry.goToPresetLocation(gantry.bin3_);
@@ -100,7 +99,7 @@ int main(int argc, char ** argv) {
     part_in_tray.pose.orientation.y = 0.0;
     part_in_tray.pose.orientation.z = 0.0;
     part_in_tray.pose.orientation.w = 1.0;
-    ROS_INFO_STREAM("Parts detected by Logical camera " << part_in_tray.type);
+
     //--Go pick the part
     gantry.pickPart(my_part);
     //--Go place the part
