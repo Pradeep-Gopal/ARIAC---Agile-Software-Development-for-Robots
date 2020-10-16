@@ -48,29 +48,39 @@ void Competition::init() {
 void Competition::fill_order() {
     int tot_order_size = 0;
     int tot_shipment_size = 0;
+    int temp_tot_shipment_size = 0;
     int tot_prod_size = 0;
+    int temp_tot_prod_size = 0;
     std::cout << "received_orders_.size() " << received_orders_.size() << std::endl;
     for (int i = 0; i < received_orders_.size(); i++) {
         ROS_INFO_STREAM("FILL_ORDER FUNCTION CALLED --------------------------");
         ROS_INFO_STREAM(received_orders_[i]);
         ROS_INFO_STREAM("Number of Shipments --------------------------");
-        tot_shipment_size = received_orders_[i].shipments.size();
+        temp_tot_shipment_size = received_orders_[i].shipments.size();
+        //rewriting the smaller value with the bigger value
+        if (temp_tot_shipment_size>tot_shipment_size){
+            tot_shipment_size = temp_tot_shipment_size;
+        }
         ROS_INFO_STREAM(tot_shipment_size);
         for (int j = 0; j < tot_shipment_size; j ++) {
             ROS_INFO_STREAM("Number of Products --------------------------");
             ROS_INFO_STREAM(received_orders_[i].shipments[j].products.size());
-            tot_prod_size = received_orders_[i].shipments[j].products.size();
+            int temp_tot_prod_size = received_orders_[i].shipments[j].products.size();
+            //rewriting the smaller value with the bigger value
+            if (temp_tot_prod_size>tot_prod_size){
+                tot_prod_size = temp_tot_prod_size;
+            }
         }
     }
     tot_order_size = received_orders_.size();
-    vector< vector< vector<string> > > vec_container(tot_order_size , vector< vector<string> > (tot_shipment_size, vector<string> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_position_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_position_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_position_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_orientation_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_orientation_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_orientation_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_container_orientation_w(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<string> > > vec_type(tot_order_size , vector< vector<string> > (tot_shipment_size, vector<string> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_position_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_position_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_position_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_orientation_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_orientation_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_orientation_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    vector< vector< vector<double> > > vec_orientation_w(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
     // filling the vectors of orders, shipments and products
     for (int i = 0; i < tot_order_size; i++) {
         ROS_INFO_STREAM("Filling Orders ---------------- ----------");
@@ -81,14 +91,14 @@ void Competition::fill_order() {
             for (int k = 0; k < tot_prod_size; k++) {
                 ROS_INFO_STREAM("Filling Products --------------------------");
                 //fill in the vector here
-                vec_container[i][j][k] = received_orders_[i].shipments[j].products[k].type;
-                vec_container_position_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
-                vec_container_position_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.y;
-                vec_container_position_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.z ;
-                vec_container_orientation_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
-                vec_container_orientation_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.y;
-                vec_container_orientation_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.z;
-                vec_container_orientation_w[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.w;
+                vec_type[i][j][k] = received_orders_[i].shipments[j].products[k].type;
+                vec_position_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
+                vec_position_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.y;
+                vec_position_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.z ;
+                vec_orientation_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
+                vec_orientation_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.y;
+                vec_orientation_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.z;
+                vec_orientation_w[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.w;
             }
         }
     }
@@ -98,14 +108,14 @@ void Competition::fill_order() {
             ROS_INFO_STREAM("DISPLAYING ALL Shipments --------------------------");
             for (int k = 0; k < tot_prod_size; k++) {
                 ROS_INFO_STREAM("DISPLAYING ALL  Products --------------------------");
-                ROS_INFO_STREAM(vec_container[i][j][k]);
-                ROS_INFO_STREAM(vec_container_position_x[i][j][k]);
-                ROS_INFO_STREAM(vec_container_position_y[i][j][k]);
-                ROS_INFO_STREAM(vec_container_position_z[i][j][k]);
-                ROS_INFO_STREAM(vec_container_orientation_x[i][j][k]);
-                ROS_INFO_STREAM(vec_container_orientation_y[i][j][k]);
-                ROS_INFO_STREAM(vec_container_orientation_z[i][j][k]);
-                ROS_INFO_STREAM(vec_container_orientation_w[i][j][k]);
+                ROS_INFO_STREAM(vec_type[i][j][k]);
+                ROS_INFO_STREAM(vec_position_x[i][j][k]);
+                ROS_INFO_STREAM(vec_position_y[i][j][k]);
+                ROS_INFO_STREAM(vec_position_z[i][j][k]);
+                ROS_INFO_STREAM(vec_orientation_x[i][j][k]);
+                ROS_INFO_STREAM(vec_orientation_y[i][j][k]);
+                ROS_INFO_STREAM(vec_orientation_z[i][j][k]);
+                ROS_INFO_STREAM(vec_orientation_w[i][j][k]);
             }
         }
     }
