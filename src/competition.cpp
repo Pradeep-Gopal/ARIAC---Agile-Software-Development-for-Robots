@@ -15,6 +15,7 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
     tf2_ros::TransformListener tfListener(tfBuffer);
     std::ostringstream otopic;
     std::string topic;
+//    part mypart;
     geometry_msgs::PoseStamped pose_target, pose_rel;
     if(msg->models.size() != 0){
 
@@ -52,7 +53,6 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
             double tx = pose_target.pose.position.x;
             double ty = pose_target.pose.position.y;
             double tz = pose_target.pose.position.z;
-
             // Orientation quaternion
             tf2::Quaternion q(
                     pose_target.pose.orientation.x,
@@ -60,6 +60,13 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
                     pose_target.pose.orientation.z,
                     pose_target.pose.orientation.w);
 
+            mypart.type = msg->models[i].type;
+            mypart.pose.position.x = tx;
+            mypart.pose.position.y = ty;
+            mypart.pose.position.z = tz;
+            mypart.pose.orientation.x = pose_target.pose.orientation.x;
+            mypart.pose.orientation.y = pose_target.pose.orientation.y;
+            mypart.pose.orientation.z = pose_target.pose.orientation.z;
             // 3x3 Rotation matrix from quaternion
             tf2::Matrix3x3 m(q);
 
@@ -73,10 +80,21 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
                      pose_target.header.frame_id.c_str(),
                      tx, ty, tz,
                      roll, pitch, yaw);
+            std :: cout << " ------------------ ACCESSING EVERYTHING -----------------" << std :: endl;
+            std :: cout << mypart.type << std :: endl;
+            std :: cout << mypart.pose.position.x << std :: endl;
+            std :: cout << mypart.pose.position.y << std :: endl;
+            std :: cout << mypart.pose.position.z << std :: endl;
+            std :: cout << mypart.pose.orientation.x << std :: endl;
+            std :: cout << mypart.pose.orientation.y<< std :: endl;
+            std :: cout << mypart.pose.orientation.z << std :: endl;
+            std :: cout << "******************---------*******************------------***" << std :: endl;
         }
         ROS_INFO_STREAM(" ");
         ROS_INFO_STREAM(" ");
+
     }
+
 }
 
 void Competition::init() {

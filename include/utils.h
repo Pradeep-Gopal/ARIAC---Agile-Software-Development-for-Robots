@@ -67,6 +67,7 @@ typedef struct Part {
   PartStates state; // model state (enum PartStates)
   bool faulty;
 } part;
+extern struct Part mypart;
 
 typedef struct Position {
     std::vector<double> gantry;

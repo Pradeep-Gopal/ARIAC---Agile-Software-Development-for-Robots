@@ -38,6 +38,9 @@
 
 #define MAX_NUMER_OF_CAMERAS 17
 
+
+struct Part mypart;
+
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "rwa3_node");
     ros::NodeHandle node;
@@ -97,7 +100,7 @@ int main(int argc, char ** argv) {
     part_in_tray.pose.orientation.y = 0.0;
     part_in_tray.pose.orientation.z = 0.0;
     part_in_tray.pose.orientation.w = 1.0;
-
+    ROS_INFO_STREAM("Parts detected by Logical camera " << part_in_tray.type);
     //--Go pick the part
     gantry.pickPart(my_part);
     //--Go place the part

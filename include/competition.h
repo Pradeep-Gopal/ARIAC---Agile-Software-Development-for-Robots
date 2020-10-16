@@ -12,7 +12,6 @@
 #include <nist_gear/LogicalCameraImage.h>
 #include "utils.h"
 
-
 /**
  * @brief Competition class
  * 
