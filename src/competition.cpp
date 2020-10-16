@@ -58,22 +58,44 @@ void Competition::pre_kitting()
 {
     std::vector<order> orders_vector;
     std::vector<shipment> shipment_vector;
+    std::vector<product> product_vector;
+    std::string hello;
+
 
     // Populating Orders vector
     for (int i =0; i < received_orders_.size(); i++)
     {
-        orders_vector[i].order_id = received_orders_[i].order_id;
-        orders_vector[i].shipments = received_orders_[i].shipments;
+        order order_instance;
+        order_instance.order_id = received_orders_[i].order_id;
+        order_instance.shipments = received_orders_[i].shipments;
+        orders_vector.push_back(order_instance);
 
         //Populating Shipment vector for each order
-        for (int j = 0; orders_vector[j].shipments.size(); j++)
+        for (int j = 0; j < orders_vector[i].shipments.size(); j++)
         {
-            shipment_vector[j].shipment_type = orders_vector[i].shipments[j].shipment_type;
-            shipment_vector[j].agv_id = orders_vector[i].shipments[j].agv_id;
-            shipment_vector[j].products = orders_vector[i].shipments[j].products;
+            shipment shipment_instance;
+            shipment_instance.shipment_type = orders_vector[i].shipments[j].shipment_type;
+            shipment_instance.agv_id  = orders_vector[i].shipments[j].agv_id;
+            shipment_instance.products  = orders_vector[i].shipments[j].products;
+
+            shipment_vector.push_back(shipment_instance);
+            //Products pirichifying
+            ROS_INFO_STREAM("==========================PARTS TO BE PICKED==============================");
+            for (int k = 0; k < shipment_vector[j].products.size(); k++)
+            {
+                part part_to_be_picked;
+                part_to_be_picked.type = shipment_vector[j].products[k].type;
+                part_to_be_picked.pose.position.x = shipment_vector[j].products[k].pose.position.x;
+                part_to_be_picked.pose.position.x = shipment_vector[j].products[k].pose.position.y;
+                part_to_be_picked.pose.position.x = shipment_vector[j].products[k].pose.position.z;
+                part_to_be_picked.pose.orientation.x = shipment_vector[j].products[k].pose.orientation.x;
+                part_to_be_picked.pose.orientation.y = shipment_vector[j].products[k].pose.orientation.y;
+                part_to_be_picked.pose.orientation.z = shipment_vector[j].products[k].pose.orientation.z;
+                part_to_be_picked.pose.orientation.w = shipment_vector[j].products[k].pose.orientation.w;
+                ROS_INFO_STREAM(part_to_be_picked.type);
+            }
         }
     }
-
 }
 
 //void Competition::print_parts_detected(){
