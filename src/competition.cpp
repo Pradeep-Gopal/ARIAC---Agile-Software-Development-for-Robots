@@ -7,6 +7,7 @@
 int camera_no = 0;
 //part parts_from_camera[40][40];
 std::array<std::array<part, 20>, 20>  parts_from_camera ;
+std::array<part, 20>  parts_from_order ;
 ////////////////////////////////////////////////////
 
 Competition::Competition(ros::NodeHandle & node): current_score_(0)
@@ -40,8 +41,6 @@ void Competition::init() {
 }
 
 void Competition::print_parts_detected(){
-    ROS_INFO_STREAM("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-
     for (int i = 0; i < parts_from_camera.size(); i++)
     {
         std::cout << "parts from camera = " << i << std::endl;
@@ -54,12 +53,35 @@ void Competition::print_parts_detected(){
     }
 }
 
+
+void Competition::pre_kitting()
+{
+    std::vector<order> orders_vector;
+    std::vector<shipment> shipment_vector;
+
+    // Populating Orders vector
+    for (int i =0; i < received_orders_.size(); i++)
+    {
+        orders_vector[i].order_id = received_orders_[i].order_id;
+        orders_vector[i].shipments = received_orders_[i].shipments;
+
+        //Populating Shipment vector for each order
+        for (int j = 0; orders_vector[j].shipments.size(); j++)
+        {
+            shipment_vector[j].shipment_type = orders_vector[i].shipments[j].shipment_type;
+            shipment_vector[j].agv_id = orders_vector[i].shipments[j].agv_id;
+            shipment_vector[j].products = orders_vector[i].shipments[j].products;
+        }
+    }
+
+}
+
 //void Competition::print_parts_detected(){
 //    ROS_INFO_STREAM("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 //
 //    for( auto &row : parts_from_camera)
 //        for(auto &col : row)
-//            ROS_INFO_STREAM(col.type);
+//            ROS_INFO_STREAM(col.type);,
 //}
 
 void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx)
@@ -173,8 +195,9 @@ void Competition::competition_state_callback(const std_msgs::String::ConstPtr & 
 }
 
 void Competition::order_callback(const nist_gear::Order::ConstPtr & msg) {
-    ROS_INFO_STREAM("Received order:\n" << *msg);
+//    ROS_INFO_STREAM("Received order:\n" << *msg);
     received_orders_.push_back(*msg);
+    Competition::pre_kitting();
 }
 
 /// Called when a new message is received.

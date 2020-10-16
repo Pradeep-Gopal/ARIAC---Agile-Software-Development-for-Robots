@@ -9,6 +9,7 @@
 #include <ros/ros.h>
 
 #include <nist_gear/VacuumGripperState.h>
+#include <nist_gear/Shipment.h>
 
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
@@ -78,7 +79,7 @@ typedef struct Position {
 typedef struct Shipment {
     std::string shipment_type;
     std::string agv_id;
-    std::vector<Product> products;
+    std::vector<nist_gear::Product> products;
     order* parent_order;
 } shipment;
 
@@ -103,7 +104,7 @@ typedef struct Product {
 
 typedef struct Order {
     std::string order_id;
-    std::vector<Shipment> shipments;
+    std::vector<nist_gear::Shipment> shipments;
 } order;
 
 typedef struct Stats {
