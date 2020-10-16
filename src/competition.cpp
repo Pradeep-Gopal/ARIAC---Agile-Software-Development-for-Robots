@@ -2,16 +2,17 @@
 #include "utils.h"
 #include <nist_gear/LogicalCameraImage.h>
 #include <nist_gear/Order.h>
-
 #include <std_srvs/Trigger.h>
+
+int camera_no = 0;
+//part parts_from_camera[40][40];
+std::array<std::array<part, 20>, 20>  parts_from_camera ;
 ////////////////////////////////////////////////////
 
 Competition::Competition(ros::NodeHandle & node): current_score_(0)
 {
   node_ = node;
 }
-
-
 
 void Competition::init() {
   // Subscribe to the '/ariac/current_score' topic.
@@ -38,20 +39,46 @@ void Competition::init() {
 
 }
 
+void Competition::print_parts_detected(){
+    ROS_INFO_STREAM("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+
+    for (int i = 0; i < parts_from_camera.size(); i++)
+    {
+        std::cout << "parts from camera = " << i << std::endl;
+        std::cout << std::endl;
+        for (int j = 0; j < parts_from_camera[i].size(); j++){
+            std::cout << " " << parts_from_camera[i][j].type;
+        }
+        std::cout << std::endl;
+        std::cout << std::endl;
+    }
+}
+
+//void Competition::print_parts_detected(){
+//    ROS_INFO_STREAM("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+//
+//    for( auto &row : parts_from_camera)
+//        for(auto &col : row)
+//            ROS_INFO_STREAM(col.type);
+//}
+
 void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx)
 {
     tf2_ros::Buffer tfBuffer;
     tf2_ros::TransformListener tfListener(tfBuffer);
     std::ostringstream otopic;
     std::string topic;
+    std::ostringstream otopic_part;
+    std::string topic_part;
+
     geometry_msgs::PoseStamped pose_target, pose_rel;
     if(msg->models.size() != 0){
 
         // ROS_INFO_STREAM("Camera_id : " << cam_idx);
         // ROS_INFO_STREAM("Logical camera: '" << msg->models.size() << "' objects.");
         int part_no = 0;
-        ROS_INFO_STREAM("Parts detected by Logical camera " << cam_idx);
-        ROS_INFO_STREAM(" ");
+//        ROS_INFO_STREAM("Parts detected by Logical camera " << cam_idx);
+//        ROS_INFO_STREAM(" ");
         for(int i = 0; i<msg->models.size(); i++)
         {
             part_no++;
@@ -96,15 +123,42 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
             double roll, pitch, yaw;
             m.getRPY(roll, pitch, yaw);
 
+            otopic_part.str("");
+            otopic_part.clear();
+            otopic_part << msg->models[i].type << "_" << cam_idx << "_" << part_no;
+            topic_part = otopic_part.str();
+
+            parts_from_camera[cam_idx][i].type = msg->models[i].type;
+            parts_from_camera[cam_idx][i].pose.position.x = tx;
+            parts_from_camera[cam_idx][i].pose.position.y = ty;
+            parts_from_camera[cam_idx][i].pose.position.z = tz;
+            parts_from_camera[cam_idx][i].pose.orientation.x = pose_target.pose.orientation.x;
+            parts_from_camera[cam_idx][i].pose.orientation.y = pose_target.pose.orientation.y;
+            parts_from_camera[cam_idx][i].pose.orientation.z = pose_target.pose.orientation.z;
+            parts_from_camera[cam_idx][i].pose.orientation.w = pose_target.pose.orientation.w;
+
+
+//            parts_from_camera[i].type = msg->models[i].type;
+//            parts_from_camera[i].pose.position.x = tx;
+//            parts_from_camera[i].pose.position.y = ty;
+//            parts_from_camera[i].pose.position.z = tz;
+//            parts_from_camera[i].pose.orientation.x = pose_target.pose.orientation.x;
+//            parts_from_camera[i].pose.orientation.y = pose_target.pose.orientation.y;
+//            parts_from_camera[i].pose.orientation.z = pose_target.pose.orientation.z;
+//            parts_from_camera[i].pose.orientation.w = pose_target.pose.orientation.w;
+
+
             // Output the measure
-            ROS_INFO("'%s' in '%s' frame : X: %.2f Y: %.2f Z: %.2f - R: %.2f P: %.2f Y: %.2f",
-                     topic.c_str(),
-                     pose_target.header.frame_id.c_str(),
-                     tx, ty, tz,
-                     roll, pitch, yaw);
+//            ROS_INFO("'%s' in '%s' frame : X: %.2f Y: %.2f Z: %.2f - R: %.2f P: %.2f Y: %.2f",
+//                     topic.c_str(),
+//                     pose_target.header.frame_id.c_str(),
+//                     tx, ty, tz,
+//                     roll, pitch, yaw);
+
         }
-        ROS_INFO_STREAM(" ");
-        ROS_INFO_STREAM(" ");
+
+//        ROS_INFO_STREAM(" ");
+//        ROS_INFO_STREAM(" ");
     }
 }
 

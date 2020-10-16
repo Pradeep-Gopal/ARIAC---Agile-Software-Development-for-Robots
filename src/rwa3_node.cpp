@@ -35,9 +35,10 @@
 
 #include <tf2/LinearMath/Quaternion.h>
 
-#define MAX_NUMER_OF_CAMERAS 17
+#define MAX_NUMBER_OF_CAMERAS 17
 
 int main(int argc, char ** argv) {
+
     ros::init(argc, argv, "rwa3_node");
     ros::NodeHandle node;
     ros::AsyncSpinner spinner(8);
@@ -46,11 +47,11 @@ int main(int argc, char ** argv) {
     Competition comp(node);
 
     //Array of Logical Camera Subscribers
-    ros::Subscriber logical_camera_subscriber_ [MAX_NUMER_OF_CAMERAS];
+    ros::Subscriber logical_camera_subscriber_ [MAX_NUMBER_OF_CAMERAS];
     std::ostringstream otopic;
     std::string topic;
 
-    for (int idx = 0; idx < MAX_NUMER_OF_CAMERAS; idx++){
+    for (int idx = 0; idx < MAX_NUMBER_OF_CAMERAS; idx++){
         otopic.str("");
         otopic.clear();
         otopic << "/ariac/logical_camera_" << idx;
@@ -61,8 +62,7 @@ int main(int argc, char ** argv) {
 
 
     comp.init();
-
-
+    comp.print_parts_detected();
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();

@@ -68,6 +68,7 @@ typedef struct Part {
   bool faulty;
 } part;
 
+
 typedef struct Position {
     std::vector<double> gantry;
     std::vector<double> left;
