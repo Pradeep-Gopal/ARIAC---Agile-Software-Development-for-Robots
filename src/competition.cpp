@@ -5,6 +5,8 @@
 #include <std_srvs/Trigger.h>
 #include <vector>
 using std::vector;
+#include <string>
+using namespace std;
 int camera_no = 0;
 //part parts_from_camera[40][40];
 std::array<std::array<part, 20>, 20>  parts_from_camera ;
@@ -61,7 +63,7 @@ void Competition::fill_order() {
         }
     }
     tot_order_size = received_orders_.size();
-    vector< vector< vector<part> > > vec_container(tot_order_size , vector< vector<part> > (tot_shipment_size, vector<part> (tot_prod_size) ) );
+    vector< vector< vector<string> > > vec_container(tot_order_size , vector< vector<string> > (tot_shipment_size, vector<string> (tot_prod_size) ) );
     // filling the vectors of orders, shipments and products
     for (int i = 0; i < tot_order_size; i++) {
         ROS_INFO_STREAM("Filling Orders ---------------- ----------");
@@ -72,7 +74,7 @@ void Competition::fill_order() {
             for (int k = 0; k < tot_prod_size; k++) {
                 ROS_INFO_STREAM("Filling Products --------------------------");
                 //fill in the vector here
-                vec_container[i][j][k] = received_orders_[i].shipments[j].products[k];
+                vec_container[i][j][k] = received_orders_[i].shipments[j].products[k].type;
             }
         }
     }
@@ -81,7 +83,7 @@ void Competition::fill_order() {
         for (int j = 0; j < tot_shipment_size; j++) {
             ROS_INFO_STREAM("DISPLAYING ALL Shipments --------------------------");
             for (int k = 0; k < tot_prod_size; k++) {
-                ROS_INFO_STREAM("DISPLAYING ALL  Products --------------------------")
+                ROS_INFO_STREAM("DISPLAYING ALL  Products --------------------------");
                 ROS_INFO_STREAM(vec_container[i][j][k]);
             }
         }
