@@ -3,11 +3,22 @@
 #include <nist_gear/LogicalCameraImage.h>
 #include <nist_gear/Order.h>
 #include <std_srvs/Trigger.h>
+#include "gantry_control.h"
+#include <string>
+#include <vector>
 
 int camera_no = 0;
 //part parts_from_camera[40][40];
 std::array<std::array<part, 20>, 20>  parts_from_camera ;
-std::array<part, 20>  parts_from_order ;
+std::vector<order> orders_vector;
+std::vector<shipment> shipment_vector;
+std::vector<product> product_vector;
+std::vector<pick_and_place> pick_and_place_poses_vector;
+
+using std::vector;
+
+vector<vector<vector<master_struct> > > master_vector (10,vector<vector<master_struct> >(10,vector <master_struct>(20)));
+
 ////////////////////////////////////////////////////
 
 Competition::Competition(ros::NodeHandle & node): current_score_(0)
@@ -56,11 +67,6 @@ void Competition::print_parts_detected(){
 
 void Competition::pre_kitting()
 {
-    std::vector<order> orders_vector;
-    std::vector<shipment> shipment_vector;
-    std::vector<product> product_vector;
-    std::string hello;
-
 
     // Populating Orders vector
     for (int i =0; i < received_orders_.size(); i++)
@@ -79,22 +85,121 @@ void Competition::pre_kitting()
             shipment_instance.products  = orders_vector[i].shipments[j].products;
 
             shipment_vector.push_back(shipment_instance);
-            //Products pirichifying
+
             ROS_INFO_STREAM("==========================PARTS TO BE PICKED==============================");
             for (int k = 0; k < shipment_vector[j].products.size(); k++)
             {
-                part part_to_be_picked;
-                part_to_be_picked.type = shipment_vector[j].products[k].type;
-                part_to_be_picked.pose.position.x = shipment_vector[j].products[k].pose.position.x;
-                part_to_be_picked.pose.position.x = shipment_vector[j].products[k].pose.position.y;
-                part_to_be_picked.pose.position.x = shipment_vector[j].products[k].pose.position.z;
-                part_to_be_picked.pose.orientation.x = shipment_vector[j].products[k].pose.orientation.x;
-                part_to_be_picked.pose.orientation.y = shipment_vector[j].products[k].pose.orientation.y;
-                part_to_be_picked.pose.orientation.z = shipment_vector[j].products[k].pose.orientation.z;
-                part_to_be_picked.pose.orientation.w = shipment_vector[j].products[k].pose.orientation.w;
-                ROS_INFO_STREAM(part_to_be_picked.type);
+//                ROS_INFO_STREAM(shipment_vector[j].products[k].type);
+                if(shipment_vector[j].products[k].type == ("pulley_part_red") || ("pulley_part_blue") || ("pulley_part_green") || ("piston_part_red") || ("piston_part_green") || ("piston_part_blue") || ("disk_part_red") || ("disk_part_green") || ("disk_part_blue") || ("gasket_part_red") || ("gasket_part_green") || ("gasket_part_blue") ) {
+//                    ROS_INFO_STREAM("Part kidachiduchu doiiii");
+//                    ROS_INFO_STREAM(shipment_vector[j].products[k].type);
+                    part part_to_be_placed;
+                    part_to_be_placed.type = shipment_vector[j].products[k].type;
+                    part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.x;
+                    part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.y;
+                    part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.z;
+                    part_to_be_placed.pose.orientation.x = shipment_vector[j].products[k].pose.orientation.x;
+                    part_to_be_placed.pose.orientation.y = shipment_vector[j].products[k].pose.orientation.y;
+                    part_to_be_placed.pose.orientation.z = shipment_vector[j].products[k].pose.orientation.z;
+                    part_to_be_placed.pose.orientation.w = shipment_vector[j].products[k].pose.orientation.w;
+
+                    master_struct master_struct_instance;
+                    master_struct_instance.type = shipment_vector[j].products[k].type;
+                    master_struct_instance.place_part_pose.position.x = part_to_be_placed.pose.position.x;
+                    master_struct_instance.place_part_pose.position.y = part_to_be_placed.pose.position.x;
+                    master_struct_instance.place_part_pose.position.z = part_to_be_placed.pose.position.x;
+                    master_struct_instance.place_part_pose.orientation.x = part_to_be_placed.pose.orientation.x;
+                    master_struct_instance.place_part_pose.orientation.y = part_to_be_placed.pose.orientation.y;
+                    master_struct_instance.place_part_pose.orientation.z = part_to_be_placed.pose.orientation.z;
+                    master_struct_instance.place_part_pose.orientation.w = part_to_be_placed.pose.orientation.w;
+                    master_struct_instance.order_id = order_instance.order_id;
+                    master_struct_instance.shipment_type = shipment_instance.shipment_type;
+                    master_struct_instance.agv_id = shipment_instance.agv_id;
+                    master_vector[i][j][k] = master_struct_instance;
+                    ROS_INFO_STREAM("Part kidachiduchu doiiii");
+                    ROS_INFO_STREAM(master_vector[i][j][k].type);
+                }
+
+//                product product_vector_instance;
+//                product_vector_instance.type = part_to_be_placed.type;
+//                product_vector_instance.pose.position.x = part_to_be_placed.pose.position.x;
+//                product_vector_instance.pose.position.y = part_to_be_placed.pose.position.y;
+//                product_vector_instance.pose.position.z = part_to_be_placed.pose.position.z;
+//                product_vector_instance.pose.orientation.x = part_to_be_placed.pose.orientation.x;
+//                product_vector_instance.pose.orientation.y = part_to_be_placed.pose.orientation.y;
+//                product_vector_instance.pose.orientation.z = part_to_be_placed.pose.orientation.z;
+//                product_vector_instance.pose.orientation.w = part_to_be_placed.pose.orientation.w;
+//                product_vector_instance.agv_id = shipment_instance.agv_id;
+//                product_vector.push_back(product_vector_instance);
+
+//                Competition::during_kitting(part_to_be_placed);
             }
         }
+    }
+//    Competition::print_parts_to_pick();
+
+ROS_INFO_STREAM("Thats all folks!!!!");
+}
+
+void Competition::print_parts_to_pick()
+{
+    for(int i=0; i < 10;  i++) {
+        for (int j = 0; j < 10; j++) {
+            for (int k = 0; k < 20; k++) {
+                if(master_vector[i][j][k].type == ("pulley_part_red") || ("pulley_part_blue") || ("pulley_part_green") || ("piston_part_red") || ("piston_part_green")
+                || ("piston_part_blue") || ("disk_part_red") || ("disk_part_green") || ("disk_part_blue") || ("gasket_part_red") || ("gasket_part_green") || ("gasket_part_blue") )
+                {
+                    ROS_INFO_STREAM("fejkwfhkewfkjwfhkw");
+                    ROS_INFO_STREAM(master_vector[i][j][k].type);
+                }
+            }
+        }
+    }
+}
+
+void Competition::during_kitting(part part_to_be_placed)
+{
+    for (int i = 0; i < parts_from_camera.size(); i++)
+    {
+        for (int j = 0; j < parts_from_camera[i].size(); j++){
+
+            if (parts_from_camera[i][j].type == part_to_be_placed.type)
+            {
+                ROS_INFO_STREAM("Sterssssssssssssssssssssssssssssssssssssssssssssssssssss");
+                ROS_INFO_STREAM(parts_from_camera[i][j].type);
+                part part_to_be_picked;
+                part_to_be_picked.type = parts_from_camera[i][j].type;
+                part_to_be_picked.pose.position.x = parts_from_camera[i][j].pose.position.x;
+                part_to_be_picked.pose.position.x = parts_from_camera[i][j].pose.position.y;
+                part_to_be_picked.pose.position.x = parts_from_camera[i][j].pose.position.z;
+                part_to_be_picked.pose.orientation.x = parts_from_camera[i][j].pose.orientation.x;
+                part_to_be_picked.pose.orientation.y = parts_from_camera[i][j].pose.orientation.y;
+                part_to_be_picked.pose.orientation.z = parts_from_camera[i][j].pose.orientation.z;
+                part_to_be_picked.pose.orientation.w = parts_from_camera[i][j].pose.orientation.w;
+
+                pick_and_place pick_and_place_instance;
+                pick_and_place_instance.type = part_to_be_picked.type;
+                pick_and_place_instance.pickup_part_pose.position.x = part_to_be_picked.pose.position.x;
+                pick_and_place_instance.pickup_part_pose.position.y = part_to_be_picked.pose.position.y;
+                pick_and_place_instance.pickup_part_pose.position.z = part_to_be_picked.pose.position.z;
+                pick_and_place_instance.pickup_part_pose.orientation.x = part_to_be_picked.pose.orientation.x;
+                pick_and_place_instance.pickup_part_pose.orientation.y = part_to_be_picked.pose.orientation.y;
+                pick_and_place_instance.pickup_part_pose.orientation.z = part_to_be_picked.pose.orientation.z;
+                pick_and_place_instance.pickup_part_pose.orientation.w = part_to_be_picked.pose.orientation.w;
+
+                pick_and_place_instance.place_part_pose.position.x = part_to_be_placed.pose.position.x;
+                pick_and_place_instance.place_part_pose.position.y = part_to_be_placed.pose.position.y;
+                pick_and_place_instance.place_part_pose.position.z = part_to_be_placed.pose.position.z;
+                pick_and_place_instance.place_part_pose.orientation.x = part_to_be_placed.pose.orientation.x;
+                pick_and_place_instance.place_part_pose.orientation.y = part_to_be_placed.pose.orientation.y;
+                pick_and_place_instance.place_part_pose.orientation.z = part_to_be_placed.pose.orientation.z;
+                pick_and_place_instance.place_part_pose.orientation.w = part_to_be_placed.pose.orientation.w;
+
+                pick_and_place_poses_vector.push_back(pick_and_place_instance);
+            }
+        }
+        std::cout << std::endl;
+        std::cout << std::endl;
     }
 }
 

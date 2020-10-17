@@ -60,9 +60,8 @@ int main(int argc, char ** argv) {
                 (topic, 10, boost::bind(&Competition::logical_camera_callback, &comp, _1, idx));
     }
 
-
     comp.init();
-    comp.print_parts_detected();
+//    comp.print_parts_detected();
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();

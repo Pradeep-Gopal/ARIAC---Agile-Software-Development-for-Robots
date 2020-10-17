@@ -55,7 +55,7 @@ typedef struct PresetLocation {
     std::vector<double> gantry;
     std::vector<double> left_arm;
     std::vector<double> right_arm;
-} start, bin3, agv2;
+} start, bin3, bin16, bin13, shelf5, agv2, shelf5a, shelf5b;
 
 
 typedef struct Part {
@@ -69,6 +69,20 @@ typedef struct Part {
   bool faulty;
 } part;
 
+typedef struct master_struct{
+    std::string type;
+    geometry_msgs::Pose place_part_pose;
+    std::string order_id;
+    std::string shipment_type;
+    std::string agv_id;
+} master_struct;
+
+
+typedef struct pick_and_place{
+    std::string type;
+    geometry_msgs::Pose pickup_part_pose;
+    geometry_msgs::Pose place_part_pose;
+}pick_and_place;
 
 typedef struct Position {
     std::vector<double> gantry;

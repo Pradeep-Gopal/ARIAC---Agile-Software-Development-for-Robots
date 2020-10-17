@@ -43,10 +43,21 @@ void GantryControl::init() {
     start_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+    shelf5a_.gantry = {0.0, 0.0, -4.7};
+    shelf5a_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5a_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    shelf5b_.gantry = {-14.68, 0.0, -4.7};
+    shelf5b_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    shelf5b_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     bin3_.gantry = {4.0, -1.1, 0.};
     bin3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    bin16_.gantry = {4.68, 0, 1.96};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     agv2_.gantry = {0.6, 6.9, PI};
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
