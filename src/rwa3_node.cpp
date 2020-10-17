@@ -67,19 +67,6 @@ int main(int argc, char ** argv) {
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
     comp.Pickup();
-//    GantryControl gantry(node);
-//    gantry.init();
-
-
-    //going to preset locations
-//    gantry.goToPresetLocation(gantry.start_);
-//    gantry.goToPresetLocation(gantry.bin13_);
-//    gantry.goToPresetLocation(gantry.bin16_);
-    //next three are waypoints before you reach shelf
-//    gantry.goToPresetLocation(gantry.start_);
-//    gantry.goToPresetLocation(gantry.waypoint_1_);
-//    gantry.goToPresetLocation(gantry.waypoint_2_);
-//    gantry.goToPresetLocation(gantry.shelf5_);
     //--1-Read order
     //--2-Look for parts in this order
     //--We go to this bin because a camera above

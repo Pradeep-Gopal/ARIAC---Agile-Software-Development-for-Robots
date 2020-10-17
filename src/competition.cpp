@@ -77,12 +77,6 @@ void Competition::Pickup(){
     gantry.goToPresetLocation(gantry.shelf5_);
 }
 void Competition::fill_order() {
-
-//    int tot_order_size = 0;
-//    int tot_shipment_size = 0;
-//    int temp_tot_shipment_size = 0;
-//    int tot_prod_size = 0;
-//    int temp_tot_prod_size = 0;
     ROS_INFO_STREAM("PREVIOUS VECTOR SIZES --------------------------");
     ROS_INFO_STREAM(vec_type.size());
     ROS_INFO_STREAM(vec_type[0].size());
