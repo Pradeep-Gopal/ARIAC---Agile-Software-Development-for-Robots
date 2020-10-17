@@ -36,6 +36,23 @@
 #include <tf2/LinearMath/Quaternion.h>
 
 #define MAX_NUMBER_OF_CAMERAS 17
+std::array<std::array<part, 20>, 20>  parts_from_camera_main ;
+std::vector<std::vector<std::vector<master_struct> > > master_vector_main (10,std::vector<std::vector<master_struct> >(10,std::vector <master_struct>(20)));
+
+
+void during_kitting()
+{
+    for(int i=0; i < 10;  i++) {
+        for (int j = 0; j < 10; j++) {
+            for (int k = 0; k < 20; k++) {
+                if((master_vector_main[i][j][k].type == "pulley_part_red") || (master_vector_main[i][j][k].type == "pulley_part_blue") || (master_vector_main[i][j][k].type == "pulley_part_green")|| (master_vector_main[i][j][k].type == "disk_part_blue")|| (master_vector_main[i][j][k].type == "disk_part_red")|| (master_vector_main[i][j][k].type == "disk_part_green")|| (master_vector_main[i][j][k].type == "piston_part_blue")|| (master_vector_main[i][j][k].type == "piston_part_green")|| (master_vector_main[i][j][k].type == "piston_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_blue")|| (master_vector_main[i][j][k].type == "gasket_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_green"))
+                {
+                    ROS_INFO_STREAM(master_vector_main[i][j][k].type);
+                }
+            }
+        }
+    }
+}
 
 int main(int argc, char ** argv) {
 
@@ -61,21 +78,21 @@ int main(int argc, char ** argv) {
     }
 
     comp.init();
-//    comp.print_parts_detected();
+
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
 
     GantryControl gantry(node);
     gantry.init();
+
+    parts_from_camera_main = comp.get_parts_from_camera();
+    master_vector_main = comp.get_master_vector();
+
+    during_kitting();
+
     gantry.goToPresetLocation(gantry.start_);
-
-    //--1-Read order
-    //--2-Look for parts in this order
-    //--We go to this bin because a camera above
-    //--this bin found one of the parts in the order
     gantry.goToPresetLocation(gantry.bin3_);
-
 
     //--You should receive the following information from a camera
     part my_part;
@@ -103,6 +120,8 @@ int main(int argc, char ** argv) {
     gantry.pickPart(my_part);
     //--Go place the part
     gantry.placePart(part_in_tray, "agv2");
+
+
 
     comp.endCompetition();
     spinner.stop();

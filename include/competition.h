@@ -27,6 +27,8 @@ public:
     void endCompetition();
     void competition_state_callback(const std_msgs::String::ConstPtr & msg);
     void logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx);
+    std::array<std::array<part, 20>, 20> get_parts_from_camera();
+    std::vector<std::vector<std::vector<master_struct> > > get_master_vector();
     void print_parts_detected();
     void print_parts_to_pick();
     void pre_kitting();

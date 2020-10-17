@@ -8,16 +8,13 @@
 #include <vector>
 
 int camera_no = 0;
-//part parts_from_camera[40][40];
-std::array<std::array<part, 20>, 20>  parts_from_camera ;
+
 std::vector<order> orders_vector;
 std::vector<shipment> shipment_vector;
 std::vector<product> product_vector;
 std::vector<pick_and_place> pick_and_place_poses_vector;
-
-using std::vector;
-
-vector<vector<vector<master_struct> > > master_vector (10,vector<vector<master_struct> >(10,vector <master_struct>(20)));
+std::array<std::array<part, 20>, 20>  parts_from_camera ;
+std::vector<std::vector<std::vector<master_struct> > > master_vector (10,std::vector<std::vector<master_struct> >(10,std::vector <master_struct>(20)));
 
 ////////////////////////////////////////////////////
 
@@ -86,7 +83,7 @@ void Competition::pre_kitting()
 
             shipment_vector.push_back(shipment_instance);
 
-            ROS_INFO_STREAM("==========================PARTS TO BE PICKED==============================");
+//            ROS_INFO_STREAM("==========================PARTS TO BE PICKED==============================");
             for (int k = 0; k < shipment_vector[j].products.size(); k++)
             {
 //                ROS_INFO_STREAM(shipment_vector[j].products[k].type);
@@ -116,8 +113,6 @@ void Competition::pre_kitting()
                     master_struct_instance.shipment_type = shipment_instance.shipment_type;
                     master_struct_instance.agv_id = shipment_instance.agv_id;
                     master_vector[i][j][k] = master_struct_instance;
-                    ROS_INFO_STREAM("Part kidachiduchu doiiii");
-                    ROS_INFO_STREAM(master_vector[i][j][k].type);
                 }
 
 //                product product_vector_instance;
@@ -137,8 +132,7 @@ void Competition::pre_kitting()
         }
     }
 //    Competition::print_parts_to_pick();
-
-ROS_INFO_STREAM("Thats all folks!!!!");
+//    ROS_INFO_STREAM("===================Thats all folks!!!!======================");
 }
 
 void Competition::print_parts_to_pick()
@@ -146,10 +140,9 @@ void Competition::print_parts_to_pick()
     for(int i=0; i < 10;  i++) {
         for (int j = 0; j < 10; j++) {
             for (int k = 0; k < 20; k++) {
-                if(master_vector[i][j][k].type == ("pulley_part_red") || ("pulley_part_blue") || ("pulley_part_green") || ("piston_part_red") || ("piston_part_green")
-                || ("piston_part_blue") || ("disk_part_red") || ("disk_part_green") || ("disk_part_blue") || ("gasket_part_red") || ("gasket_part_green") || ("gasket_part_blue") )
+                if((master_vector[i][j][k].type == "pulley_part_red") || (master_vector[i][j][k].type == "pulley_part_blue") || (master_vector[i][j][k].type == "pulley_part_green")|| (master_vector[i][j][k].type == "disk_part_blue")|| (master_vector[i][j][k].type == "disk_part_red")|| (master_vector[i][j][k].type == "disk_part_green")|| (master_vector[i][j][k].type == "piston_part_blue")|| (master_vector[i][j][k].type == "piston_part_green")|| (master_vector[i][j][k].type == "piston_part_red")|| (master_vector[i][j][k].type == "gasket_part_blue")|| (master_vector[i][j][k].type == "gasket_part_red")|| (master_vector[i][j][k].type == "gasket_part_green"))
                 {
-                    ROS_INFO_STREAM("fejkwfhkewfkjwfhkw");
+                    ROS_INFO_STREAM("Parts in master vector");
                     ROS_INFO_STREAM(master_vector[i][j][k].type);
                 }
             }
@@ -157,51 +150,16 @@ void Competition::print_parts_to_pick()
     }
 }
 
-void Competition::during_kitting(part part_to_be_placed)
+std::array<std::array<part, 20>, 20> Competition::get_parts_from_camera()
 {
-    for (int i = 0; i < parts_from_camera.size(); i++)
-    {
-        for (int j = 0; j < parts_from_camera[i].size(); j++){
-
-            if (parts_from_camera[i][j].type == part_to_be_placed.type)
-            {
-                ROS_INFO_STREAM("Sterssssssssssssssssssssssssssssssssssssssssssssssssssss");
-                ROS_INFO_STREAM(parts_from_camera[i][j].type);
-                part part_to_be_picked;
-                part_to_be_picked.type = parts_from_camera[i][j].type;
-                part_to_be_picked.pose.position.x = parts_from_camera[i][j].pose.position.x;
-                part_to_be_picked.pose.position.x = parts_from_camera[i][j].pose.position.y;
-                part_to_be_picked.pose.position.x = parts_from_camera[i][j].pose.position.z;
-                part_to_be_picked.pose.orientation.x = parts_from_camera[i][j].pose.orientation.x;
-                part_to_be_picked.pose.orientation.y = parts_from_camera[i][j].pose.orientation.y;
-                part_to_be_picked.pose.orientation.z = parts_from_camera[i][j].pose.orientation.z;
-                part_to_be_picked.pose.orientation.w = parts_from_camera[i][j].pose.orientation.w;
-
-                pick_and_place pick_and_place_instance;
-                pick_and_place_instance.type = part_to_be_picked.type;
-                pick_and_place_instance.pickup_part_pose.position.x = part_to_be_picked.pose.position.x;
-                pick_and_place_instance.pickup_part_pose.position.y = part_to_be_picked.pose.position.y;
-                pick_and_place_instance.pickup_part_pose.position.z = part_to_be_picked.pose.position.z;
-                pick_and_place_instance.pickup_part_pose.orientation.x = part_to_be_picked.pose.orientation.x;
-                pick_and_place_instance.pickup_part_pose.orientation.y = part_to_be_picked.pose.orientation.y;
-                pick_and_place_instance.pickup_part_pose.orientation.z = part_to_be_picked.pose.orientation.z;
-                pick_and_place_instance.pickup_part_pose.orientation.w = part_to_be_picked.pose.orientation.w;
-
-                pick_and_place_instance.place_part_pose.position.x = part_to_be_placed.pose.position.x;
-                pick_and_place_instance.place_part_pose.position.y = part_to_be_placed.pose.position.y;
-                pick_and_place_instance.place_part_pose.position.z = part_to_be_placed.pose.position.z;
-                pick_and_place_instance.place_part_pose.orientation.x = part_to_be_placed.pose.orientation.x;
-                pick_and_place_instance.place_part_pose.orientation.y = part_to_be_placed.pose.orientation.y;
-                pick_and_place_instance.place_part_pose.orientation.z = part_to_be_placed.pose.orientation.z;
-                pick_and_place_instance.place_part_pose.orientation.w = part_to_be_placed.pose.orientation.w;
-
-                pick_and_place_poses_vector.push_back(pick_and_place_instance);
-            }
-        }
-        std::cout << std::endl;
-        std::cout << std::endl;
-    }
+    return parts_from_camera;
 }
+
+std::vector<std::vector<std::vector<master_struct> > > Competition::get_master_vector()
+{
+    return master_vector;
+}
+
 
 //void Competition::print_parts_detected(){
 //    ROS_INFO_STREAM("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
