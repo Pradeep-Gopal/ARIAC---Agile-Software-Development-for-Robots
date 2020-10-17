@@ -62,7 +62,7 @@ int main(int argc, char ** argv) {
 
 
     comp.init();
-    comp.print_parts_detected();
+    comp.print_parts_detected(); // not needed necesserily, just for debgging
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
@@ -70,12 +70,12 @@ int main(int argc, char ** argv) {
     GantryControl gantry(node);
     gantry.init();
     gantry.goToPresetLocation(gantry.start_);
-
+    gantry.goToPresetLocation(gantry.bin16_);
     //--1-Read order
     //--2-Look for parts in this order
     //--We go to this bin because a camera above
     //--this bin found one of the parts in the order
-    gantry.goToPresetLocation(gantry.bin3_);
+//    gantry.goToPresetLocation(gantry.bin16_);
 
 
     //--You should receive the following information from a camera

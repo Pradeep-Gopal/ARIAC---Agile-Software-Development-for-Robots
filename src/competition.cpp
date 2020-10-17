@@ -19,9 +19,9 @@ int tot_shipment_size = 0;
 int temp_tot_shipment_size = 0;
 int tot_prod_size = 0;
 int temp_tot_prod_size = 0;
-//
+// dummy dimensions to initialize vectors here
 int test_dimensions = 3;
-//
+//making vectors global
 vector< vector< vector<string> > > vec_type(test_dimensions , vector< vector<string> > (test_dimensions, vector<string> (test_dimensions) ) );
 vector< vector< vector<double> > > vec_position_x(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
 vector< vector< vector<double> > > vec_position_y(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
@@ -350,5 +350,6 @@ double Competition::getClock() {
 
 
 std::string Competition::getCompetitionState() {
+    ROS_INFO_STREAM("------------ competition_state_ BELOW -----------");
     return competition_state_;
 }

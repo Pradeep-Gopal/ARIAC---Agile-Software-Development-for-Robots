@@ -66,6 +66,7 @@ class GantryControl {
     start start_;
     bin3 bin3_;
     agv2 agv2_;
+    bin16 bin16_;
 
   private:
     std::vector<double> joint_group_positions_;

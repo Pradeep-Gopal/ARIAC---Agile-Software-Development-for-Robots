@@ -39,6 +39,12 @@ void GantryControl::init() {
     left_arm_group_.setPoseReferenceFrame("world");
 
     //--start location
+
+    bin16_.gantry = {2.88, 1.68,0.0};
+    bin16_.left_arm = {-1.89, -1.38,0.5,-0.08,0.00,0.00};
+    bin16_.right_arm = {-0.02,-0.01,0.05,0.08,0.00,0.00};
+
+
     start_.gantry = {0,0,0};
     start_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};

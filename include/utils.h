@@ -54,8 +54,9 @@ typedef struct PresetLocation {
     std::vector<double> gantry;
     std::vector<double> left_arm;
     std::vector<double> right_arm;
-} start, bin3, agv2;
+} start, bin3, agv2, bin16;
 
+//define here
 
 typedef struct Part {
   std::string type; // model type
