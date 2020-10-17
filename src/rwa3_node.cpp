@@ -66,7 +66,7 @@ int main(int argc, char ** argv) {
 
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
-    comp.Pickup();
+    comp.GoToPoint();
     //--1-Read order
     //--2-Look for parts in this order
     //--We go to this bin because a camera above

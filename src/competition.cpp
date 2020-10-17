@@ -62,7 +62,7 @@ void Competition::init() {
 
 }
 
-void Competition::Pickup(){
+void Competition::GoToPoint(){
     ros::NodeHandle node;
     GantryControl gantry(node);
     gantry.init();
@@ -75,6 +75,10 @@ void Competition::Pickup(){
     gantry.goToPresetLocation(gantry.waypoint_1_);
     gantry.goToPresetLocation(gantry.waypoint_2_);
     gantry.goToPresetLocation(gantry.shelf5_);
+}
+
+void Competition::PickUp(){
+
 }
 void Competition::fill_order() {
     ROS_INFO_STREAM("PREVIOUS VECTOR SIZES --------------------------");
