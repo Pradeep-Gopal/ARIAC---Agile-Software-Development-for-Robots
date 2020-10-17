@@ -12,6 +12,25 @@ int camera_no = 0;
 std::array<std::array<part, 20>, 20>  parts_from_camera ;
 //array of structs
 std :: array<part,20> struct_array;
+
+//declaring vectors
+int tot_order_size = 0;
+int tot_shipment_size = 0;
+int temp_tot_shipment_size = 0;
+int tot_prod_size = 0;
+int temp_tot_prod_size = 0;
+//
+int test_dimensions = 3;
+//
+vector< vector< vector<string> > > vec_type(test_dimensions , vector< vector<string> > (test_dimensions, vector<string> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_position_x(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_position_y(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_position_z(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_orientation_x(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_orientation_y(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_orientation_z(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+vector< vector< vector<double> > > vec_orientation_w(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
+
 ////////////////////////////////////////////////////
 
 Competition::Competition(ros::NodeHandle & node): current_score_(0)
@@ -46,11 +65,17 @@ void Competition::init() {
 
 
 void Competition::fill_order() {
-    int tot_order_size = 0;
-    int tot_shipment_size = 0;
-    int temp_tot_shipment_size = 0;
-    int tot_prod_size = 0;
-    int temp_tot_prod_size = 0;
+//    int tot_order_size = 0;
+//    int tot_shipment_size = 0;
+//    int temp_tot_shipment_size = 0;
+//    int tot_prod_size = 0;
+//    int temp_tot_prod_size = 0;
+    ROS_INFO_STREAM("PREVIOUS VECTOR SIZES --------------------------");
+    ROS_INFO_STREAM(vec_type.size());
+    ROS_INFO_STREAM(vec_type[0].size());
+    ROS_INFO_STREAM(vec_type[0][0].size());
+    ROS_INFO_STREAM("completed--------------------------");
+
     std::cout << "received_orders_.size() " << received_orders_.size() << std::endl;
     for (int i = 0; i < received_orders_.size(); i++) {
         ROS_INFO_STREAM("FILL_ORDER FUNCTION CALLED --------------------------");
@@ -65,7 +90,7 @@ void Competition::fill_order() {
         for (int j = 0; j < tot_shipment_size; j ++) {
             ROS_INFO_STREAM("Number of Products --------------------------");
             ROS_INFO_STREAM(received_orders_[i].shipments[j].products.size());
-            int temp_tot_prod_size = received_orders_[i].shipments[j].products.size();
+            temp_tot_prod_size = received_orders_[i].shipments[j].products.size();
             //rewriting the smaller value with the bigger value
             if (temp_tot_prod_size>tot_prod_size){
                 tot_prod_size = temp_tot_prod_size;
@@ -81,6 +106,12 @@ void Competition::fill_order() {
     vector< vector< vector<double> > > vec_orientation_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
     vector< vector< vector<double> > > vec_orientation_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
     vector< vector< vector<double> > > vec_orientation_w(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
+    ROS_INFO_STREAM("NEW VECTOR SIZES --------------------------");
+    ROS_INFO_STREAM(vec_type.size());
+    ROS_INFO_STREAM(vec_type[0].size());
+    ROS_INFO_STREAM(vec_type[0][0].size());
+    ROS_INFO_STREAM("completed--------------------------");
+
     // filling the vectors of orders, shipments and products
     for (int i = 0; i < tot_order_size; i++) {
         ROS_INFO_STREAM("Filling Orders ---------------- ----------");
@@ -219,16 +250,6 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
             parts_from_camera[cam_idx][i].pose.orientation.y = pose_target.pose.orientation.y;
             parts_from_camera[cam_idx][i].pose.orientation.z = pose_target.pose.orientation.z;
             parts_from_camera[cam_idx][i].pose.orientation.w = pose_target.pose.orientation.w;
-
-
-//            parts_from_camera[i].type = msg->models[i].type;
-//            parts_from_camera[i].pose.position.x = tx;
-//            parts_from_camera[i].pose.position.y = ty;
-//            parts_from_camera[i].pose.position.z = tz;
-//            parts_from_camera[i].pose.orientation.x = pose_target.pose.orientation.x;
-//            parts_from_camera[i].pose.orientation.y = pose_target.pose.orientation.y;
-//            parts_from_camera[i].pose.orientation.z = pose_target.pose.orientation.z;
-//            parts_from_camera[i].pose.orientation.w = pose_target.pose.orientation.w;
 
 
             // Output the measure
