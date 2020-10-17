@@ -59,7 +59,7 @@ void GantryControl::init() {
 //    pulley_part_red located on shelf5
     shelf5_.gantry = {-14.00, -4.76,0.0};
     shelf5_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
-    shelf5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0}
+    shelf5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
     start_.gantry = {0,0,0};
     start_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};

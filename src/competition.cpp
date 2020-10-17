@@ -3,6 +3,7 @@
 #include <nist_gear/LogicalCameraImage.h>
 #include <nist_gear/Order.h>
 #include <std_srvs/Trigger.h>
+#include "gantry_control.h"
 #include <vector>
 using std::vector;
 #include <string>
@@ -13,14 +14,12 @@ std::array<std::array<part, 20>, 20>  parts_from_camera ;
 //array of structs
 std :: array<part,20> struct_array;
 
-//declaring vectors
+int test_dimensions = 3;
 int tot_order_size = 0;
 int tot_shipment_size = 0;
 int temp_tot_shipment_size = 0;
 int tot_prod_size = 0;
 int temp_tot_prod_size = 0;
-// dummy dimensions to initialize vectors here
-int test_dimensions = 3;
 //making vectors global
 vector< vector< vector<string> > > vec_type(test_dimensions , vector< vector<string> > (test_dimensions, vector<string> (test_dimensions) ) );
 vector< vector< vector<double> > > vec_position_x(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
@@ -63,8 +62,22 @@ void Competition::init() {
 
 }
 
-
+void Competition::Pickup(){
+    ros::NodeHandle node;
+    GantryControl gantry(node);
+    gantry.init();
+    //going to preset locations
+    gantry.goToPresetLocation(gantry.start_);
+    gantry.goToPresetLocation(gantry.bin13_);
+    gantry.goToPresetLocation(gantry.bin16_);
+    //next three are waypoints before you reach shelf
+    gantry.goToPresetLocation(gantry.start_);
+    gantry.goToPresetLocation(gantry.waypoint_1_);
+    gantry.goToPresetLocation(gantry.waypoint_2_);
+    gantry.goToPresetLocation(gantry.shelf5_);
+}
 void Competition::fill_order() {
+
 //    int tot_order_size = 0;
 //    int tot_shipment_size = 0;
 //    int temp_tot_shipment_size = 0;
@@ -150,6 +163,8 @@ void Competition::fill_order() {
             }
         }
     }
+
+
 }
 
 //        ROS_INFO_STREAM(received_orders_[i].products.size());

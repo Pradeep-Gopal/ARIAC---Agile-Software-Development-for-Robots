@@ -27,7 +27,7 @@ public:
 
     void startCompetition();
     void endCompetition();
-
+    void Pickup();
     void fill_order();
     void prepare_vector(int,int,int);
     void competition_state_callback(const std_msgs::String::ConstPtr & msg);
