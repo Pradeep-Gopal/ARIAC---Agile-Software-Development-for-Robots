@@ -70,7 +70,12 @@ int main(int argc, char ** argv) {
     GantryControl gantry(node);
     gantry.init();
     gantry.goToPresetLocation(gantry.start_);
+    gantry.goToPresetLocation(gantry.bin13_);
     gantry.goToPresetLocation(gantry.bin16_);
+    gantry.goToPresetLocation(gantry.start_);
+    gantry.goToPresetLocation(gantry.waypoint_1_);
+    gantry.goToPresetLocation(gantry.waypoint_2_);
+    gantry.goToPresetLocation(gantry.shelf5_);
     //--1-Read order
     //--2-Look for parts in this order
     //--We go to this bin because a camera above
@@ -79,31 +84,31 @@ int main(int argc, char ** argv) {
 
 
     //--You should receive the following information from a camera
-    part my_part;
-    my_part.type = "pulley_part_red";
-    my_part.pose.position.x = 4.365789;
-    my_part.pose.position.y = 1.173381;
-    my_part.pose.position.z = 0.728011;
-    my_part.pose.orientation.x = 0.012;
-    my_part.pose.orientation.y = -0.004;
-    my_part.pose.orientation.z = 0.002;
-    my_part.pose.orientation.w = 1.000;
+//    part my_part;
+//    my_part.type = "pulley_part_red";
+//    my_part.pose.position.x = 4.365789;
+//    my_part.pose.position.y = 1.173381;
+//    my_part.pose.position.z = 0.728011;
+//    my_part.pose.orientation.x = 0.012;
+//    my_part.pose.orientation.y = -0.004;
+//    my_part.pose.orientation.z = 0.002;
+//    my_part.pose.orientation.w = 1.000;
 
     //--get pose of part in tray from /ariac/orders
-    part part_in_tray;
-    part_in_tray.type = "pulley_part_red";
-    part_in_tray.pose.position.x = -0.12;
-    part_in_tray.pose.position.x = -0.2;
-    part_in_tray.pose.position.x = 0.0;
-    part_in_tray.pose.orientation.x = 0.0;
-    part_in_tray.pose.orientation.y = 0.0;
-    part_in_tray.pose.orientation.z = 0.0;
-    part_in_tray.pose.orientation.w = 1.0;
+//    part part_in_tray;
+//    part_in_tray.type = "pulley_part_red";
+//    part_in_tray.pose.position.x = -0.12;
+//    part_in_tray.pose.position.x = -0.2;
+//    part_in_tray.pose.position.x = 0.0;
+//    part_in_tray.pose.orientation.x = 0.0;
+//    part_in_tray.pose.orientation.y = 0.0;
+//    part_in_tray.pose.orientation.z = 0.0;
+//    part_in_tray.pose.orientation.w = 1.0;
 
     //--Go pick the part
-    gantry.pickPart(my_part);
+//    gantry.pickPart(my_part);
     //--Go place the part
-    gantry.placePart(part_in_tray, "agv2");
+//    gantry.placePart(part_in_tray, "agv2");
 
     comp.endCompetition();
     spinner.stop();
