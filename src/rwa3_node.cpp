@@ -69,9 +69,11 @@ int main(int argc, char ** argv) {
 
     GantryControl gantry(node);
     gantry.init();
+    //going to preset locations
     gantry.goToPresetLocation(gantry.start_);
     gantry.goToPresetLocation(gantry.bin13_);
     gantry.goToPresetLocation(gantry.bin16_);
+    //next three are waypoints before you reach shelf
     gantry.goToPresetLocation(gantry.start_);
     gantry.goToPresetLocation(gantry.waypoint_1_);
     gantry.goToPresetLocation(gantry.waypoint_2_);
@@ -80,7 +82,6 @@ int main(int argc, char ** argv) {
     //--2-Look for parts in this order
     //--We go to this bin because a camera above
     //--this bin found one of the parts in the order
-//    gantry.goToPresetLocation(gantry.bin16_);
 
 
     //--You should receive the following information from a camera
