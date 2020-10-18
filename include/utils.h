@@ -55,7 +55,7 @@ typedef struct PresetLocation {
     std::vector<double> gantry;
     std::vector<double> left_arm;
     std::vector<double> right_arm;
-} start, bin3, bin16, bin13, shelf5, agv2, shelf5a, shelf5b;
+} start, bin3, bin16, bin13, shelf5, agv2, shelf5, waypoint_1, waypoint_2;
 
 
 typedef struct Part {
@@ -67,6 +67,7 @@ typedef struct Part {
   std::string id;
   PartStates state; // model state (enum PartStates)
   bool faulty;
+  bool picked;
 } part;
 
 typedef struct master_struct{

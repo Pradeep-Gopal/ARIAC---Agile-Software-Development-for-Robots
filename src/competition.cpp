@@ -243,6 +243,8 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
             parts_from_camera[cam_idx][i].pose.orientation.y = pose_target.pose.orientation.y;
             parts_from_camera[cam_idx][i].pose.orientation.z = pose_target.pose.orientation.z;
             parts_from_camera[cam_idx][i].pose.orientation.w = pose_target.pose.orientation.w;
+            parts_from_camera[cam_idx][i].faulty = false;
+            parts_from_camera[cam_idx][i].picked = false;
 
 
 //            parts_from_camera[i].type = msg->models[i].type;

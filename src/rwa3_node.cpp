@@ -40,19 +40,9 @@ std::array<std::array<part, 20>, 20>  parts_from_camera_main ;
 std::vector<std::vector<std::vector<master_struct> > > master_vector_main (10,std::vector<std::vector<master_struct> >(10,std::vector <master_struct>(20)));
 
 
-void during_kitting()
-{
-    for(int i=0; i < 10;  i++) {
-        for (int j = 0; j < 10; j++) {
-            for (int k = 0; k < 20; k++) {
-                if((master_vector_main[i][j][k].type == "pulley_part_red") || (master_vector_main[i][j][k].type == "pulley_part_blue") || (master_vector_main[i][j][k].type == "pulley_part_green")|| (master_vector_main[i][j][k].type == "disk_part_blue")|| (master_vector_main[i][j][k].type == "disk_part_red")|| (master_vector_main[i][j][k].type == "disk_part_green")|| (master_vector_main[i][j][k].type == "piston_part_blue")|| (master_vector_main[i][j][k].type == "piston_part_green")|| (master_vector_main[i][j][k].type == "piston_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_blue")|| (master_vector_main[i][j][k].type == "gasket_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_green"))
-                {
-                    ROS_INFO_STREAM(master_vector_main[i][j][k].type);
-                }
-            }
-        }
-    }
-}
+
+
+
 
 int main(int argc, char ** argv) {
 
@@ -89,7 +79,47 @@ int main(int argc, char ** argv) {
     parts_from_camera_main = comp.get_parts_from_camera();
     master_vector_main = comp.get_master_vector();
 
-    during_kitting();
+    for(int i=0; i < 10;  i++) {
+        for (int j = 0; j < 10; j++) {
+            for (int k = 0; k < 20; k++) {
+                if((master_vector_main[i][j][k].type == "pulley_part_red") || (master_vector_main[i][j][k].type == "pulley_part_blue") || (master_vector_main[i][j][k].type == "pulley_part_green")|| (master_vector_main[i][j][k].type == "disk_part_blue")|| (master_vector_main[i][j][k].type == "disk_part_red")|| (master_vector_main[i][j][k].type == "disk_part_green")|| (master_vector_main[i][j][k].type == "piston_part_blue")|| (master_vector_main[i][j][k].type == "piston_part_green")|| (master_vector_main[i][j][k].type == "piston_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_blue")|| (master_vector_main[i][j][k].type == "gasket_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_green"))
+                {
+                    ROS_INFO_STREAM(master_vector_main[i][j][k].type);
+
+                    for (int l = 0; l < parts_from_camera_main.size(); l++)
+                    {
+                        for (int m = 0; m < parts_from_camera_main[i].size(); m++)
+                        {
+                            if ((master_vector_main[i][j][k].type == parts_from_camera_main[l][m].type) && (parts_from_camera_main[l][m].faulty == false) &&(parts_from_camera_main[l][m].picked == false))
+                            {
+                                ROS_INFO_STREAM("Part found in environment");
+                                ROS_INFO_STREAM(parts_from_camera_main[l][m].type);
+                                if (master_vector_main[i][j][k].type == "disk_part_blue")
+                                {
+                                    std::string location = "bin_13";
+                                    gantry.goToPresetLocation(gantry.start_);
+                                    gantry.goToPresetLocation(gantry.bin13_);
+                                    parts_from_camera_main[l][m].picked == true;
+                                } else if (master_vector_main[i][j][k].type == "disk_part_green")
+                                {
+                                    std::string location = "bin_16";
+                                    gantry.goToPresetLocation(gantry.start_);
+                                    gantry.goToPresetLocation(gantry.bin16_);
+                                    parts_from_camera_main[l][m].picked == true;
+                                } else if (master_vector_main[i][j][k].type == "pulley_part_red")
+                                {
+                                    std::string location = "shelf5";
+                                    gantry.goToPresetLocation(gantry.start_);
+                                    gantry.goToPresetLocation(gantry.shelf5_);
+                                    parts_from_camera_main[l][m].picked == true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     gantry.goToPresetLocation(gantry.start_);
     gantry.goToPresetLocation(gantry.bin3_);
