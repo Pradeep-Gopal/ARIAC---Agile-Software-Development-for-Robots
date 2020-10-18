@@ -74,14 +74,14 @@ void GantryControl::init() {
     bin16_.right_arm = {-0.02,-0.01,0.05,0.08,0.00,0.00};
 
 //    pulley_part_red located on waypoint_1
-    waypoint_1_.gantry = {-0.72, -7.0,0.0};
+    waypoint_1_.gantry = {0.0, -4.7, 0.0};
     waypoint_1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     waypoint_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 
 //    pulley_part_red located on waypoint_2
-    waypoint_2_.gantry = {-14.00, -7.0,0.0};
-    waypoint_2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    waypoint_2_.gantry = {-14.50, -4.3, 0.0};
+    waypoint_2_.left_arm = {PI, -1.64, PI/2, -PI/4, PI/2, 0};
     waypoint_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 

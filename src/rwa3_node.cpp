@@ -84,8 +84,6 @@ int main(int argc, char ** argv) {
             for (int k = 0; k < 20; k++) {
                 if((master_vector_main[i][j][k].type == "pulley_part_red") || (master_vector_main[i][j][k].type == "pulley_part_blue") || (master_vector_main[i][j][k].type == "pulley_part_green")|| (master_vector_main[i][j][k].type == "disk_part_blue")|| (master_vector_main[i][j][k].type == "disk_part_red")|| (master_vector_main[i][j][k].type == "disk_part_green")|| (master_vector_main[i][j][k].type == "piston_part_blue")|| (master_vector_main[i][j][k].type == "piston_part_green")|| (master_vector_main[i][j][k].type == "piston_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_blue")|| (master_vector_main[i][j][k].type == "gasket_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_green"))
                 {
-                    ROS_INFO_STREAM(master_vector_main[i][j][k].type);
-
                     for (int l = 0; l < parts_from_camera_main.size(); l++)
                     {
                         for (int m = 0; m < parts_from_camera_main[i].size(); m++)
@@ -110,8 +108,26 @@ int main(int argc, char ** argv) {
                                 {
                                     std::string location = "shelf5";
                                     gantry.goToPresetLocation(gantry.start_);
-                                    gantry.goToPresetLocation(gantry.shelf5_);
+                                    ROS_INFO_STREAM("Start location reached");
+                                    gantry.goToPresetLocation(gantry.waypoint_1_);
+                                    ROS_INFO_STREAM("waypont1 location reached");
+                                    gantry.goToPresetLocation(gantry.waypoint_2_);
+                                    ROS_INFO_STREAM("waypoint2 location reached");
                                     parts_from_camera_main[l][m].picked == true;
+                                    gantry.pickPart(parts_from_camera_main[l][m]);
+
+                                    part part_in_tray;
+                                    part_in_tray.type = master_vector_main[i][j][k].type;
+                                    part_in_tray.pose.position.x = master_vector_main[i][j][k].place_part_pose.position.x;
+                                    part_in_tray.pose.position.y = master_vector_main[i][j][k].place_part_pose.position.y;
+                                    part_in_tray.pose.position.z = master_vector_main[i][j][k].place_part_pose.position.z;
+                                    part_in_tray.pose.orientation.x = master_vector_main[i][j][k].place_part_pose.orientation.x;
+                                    part_in_tray.pose.orientation.y = master_vector_main[i][j][k].place_part_pose.orientation.y;
+                                    part_in_tray.pose.orientation.z = master_vector_main[i][j][k].place_part_pose.orientation.z;
+                                    part_in_tray.pose.orientation.w = master_vector_main[i][j][k].place_part_pose.orientation.w;
+
+                                    gantry.placePart(part_in_tray, master_vector_main[i][j][k].agv_id);
+
                                 }
                             }
                         }
