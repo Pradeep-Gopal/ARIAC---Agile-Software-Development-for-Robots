@@ -37,6 +37,10 @@
 
 #define MAX_NUMBER_OF_CAMERAS 17
 
+//hard coding the x,y and z dimensions of the 3D vector, which can be obtained from the class
+//through getter functions. -- not hard.
+std::vector<std::vector<std::vector<string> > > returned_vec_string (1,std::vector<std::vector<string> >(1,std::vector <string>(4)));
+std::vector<std::vector<std::vector<double> > > returned_vec_double (1,std::vector<std::vector<double> >(1,std::vector <double>(4)));
 int main(int argc, char ** argv) {
 
     ros::init(argc, argv, "rwa3_node");
@@ -59,19 +63,37 @@ int main(int argc, char ** argv) {
         logical_camera_subscriber_[idx] = node.subscribe<nist_gear::LogicalCameraImage>
                 (topic, 10, boost::bind(&Competition::logical_camera_callback, &comp, _1, idx));
     }
-
-
     comp.init();
-    comp.print_parts_detected(); // not needed necesserily, just for debgging
-
     std::string c_state = comp.getCompetitionState();
     comp.getClock();
-    comp.GoToPoint();
-    //--1-Read order
-    //--2-Look for parts in this order
-    //--We go to this bin because a camera above
-    //--this bin found one of the parts in the order
-
+    GantryControl gantry(node);
+    gantry.init();
+    returned_vec_string = comp.returnVecType();
+    comp.print_vec_string(returned_vec_string);//for printing type, which is of string data-type
+    returned_vec_double = comp.returnVecPosX();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    returned_vec_double = comp.returnVecPosY();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    returned_vec_double = comp.returnVecPosZ();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    returned_vec_double = comp.returnVecOrientX();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    returned_vec_double = comp.returnVecOrientY();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    returned_vec_double = comp.returnVecOrientZ();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    returned_vec_double = comp.returnVecOrientW();
+    comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
+    ROS_INFO_STREAM("------- Going to Preset Locations -------");
+    //going to preset locations
+    gantry.goToPresetLocation(gantry.start_);
+//    gantry.goToPresetLocation(gantry.bin13_);
+    gantry.goToPresetLocation(gantry.bin16_);
+    //next three are waypoints before you reach shelf
+    gantry.goToPresetLocation(gantry.start_);
+//    gantry.goToPresetLocation(gantry.waypoint_1_);
+//    gantry.goToPresetLocation(gantry.waypoint_2_);
+//    gantry.goToPresetLocation(gantry.shelf5_);
 
     //--You should receive the following information from a camera
 //    part my_part;

@@ -4,6 +4,8 @@
 #include <nist_gear/Order.h>
 #include <std_srvs/Trigger.h>
 #include "gantry_control.h"
+#include "../include/competition.h"
+
 #include <vector>
 using std::vector;
 #include <string>
@@ -20,15 +22,6 @@ int tot_shipment_size = 0;
 int temp_tot_shipment_size = 0;
 int tot_prod_size = 0;
 int temp_tot_prod_size = 0;
-//making vectors global
-vector< vector< vector<string> > > vec_type(test_dimensions , vector< vector<string> > (test_dimensions, vector<string> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_position_x(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_position_y(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_position_z(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_orientation_x(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_orientation_y(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_orientation_z(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
-vector< vector< vector<double> > > vec_orientation_w(test_dimensions , vector< vector<double> > (test_dimensions, vector<double> (test_dimensions) ) );
 
 ////////////////////////////////////////////////////
 
@@ -36,6 +29,73 @@ Competition::Competition(ros::NodeHandle & node): current_score_(0)
 {
     node_ = node;
 }
+//VECTOR PRINT FUNC
+ void Competition::print_vec_string(vector<vector<vector<string> > > vec_print){
+     ROS_INFO_STREAM("PRINTING STRING TYPE VEC");
+     for (int i = 0; i < tot_order_size; i++) {
+         for (int j = 0; j < tot_shipment_size; j++) {
+             for (int k = 0; k < tot_prod_size; k++) {
+                 ROS_INFO_STREAM("PRINTED part is :>> "<<vec_print[i][j][k]);
+             }
+         }
+     }
+}
+
+void Competition::print_vec_double(vector<vector<vector<double> > > vec_print){
+    ROS_INFO_STREAM("PRINTING DOUBLE TYPE VEC");
+    for (int i = 0; i < tot_order_size; i++) {
+        for (int j = 0; j < tot_shipment_size; j++) {
+            for (int k = 0; k < tot_prod_size; k++) {
+                ROS_INFO_STREAM("part character "<<vec_print[i][j][k]);
+            }
+        }
+    }
+}
+//-----
+
+
+//ALL RETURN VEC FUNCTIONS
+std::vector<std::vector<std::vector<string> > > Competition::returnVecType()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_type;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecPosX()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_position_x;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecPosY()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_position_y;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecPosZ()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_position_z;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecOrientX()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_orientation_x;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecOrientY()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_orientation_y;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecOrientZ()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_orientation_z;
+}
+std::vector<std::vector<std::vector<double> > > Competition::returnVecOrientW()
+{
+    ROS_INFO_STREAM("returning vec_type to rwa3_node.cpp");
+    return vec_orientation_w;
+}
+//------
 
 void Competition::init() {
     // Subscribe to the '/ariac/current_score' topic.
@@ -62,30 +122,10 @@ void Competition::init() {
 
 }
 
-void Competition::GoToPoint(){
-    ros::NodeHandle node;
-    GantryControl gantry(node);
-    gantry.init();
-    //going to preset locations
-    gantry.goToPresetLocation(gantry.start_);
-    gantry.goToPresetLocation(gantry.bin13_);
-    gantry.goToPresetLocation(gantry.bin16_);
-    //next three are waypoints before you reach shelf
-    gantry.goToPresetLocation(gantry.start_);
-    gantry.goToPresetLocation(gantry.waypoint_1_);
-    gantry.goToPresetLocation(gantry.waypoint_2_);
-    gantry.goToPresetLocation(gantry.shelf5_);
-}
-
 void Competition::PickUp(){
 
 }
 void Competition::fill_order() {
-    ROS_INFO_STREAM("PREVIOUS VECTOR SIZES --------------------------");
-    ROS_INFO_STREAM(vec_type.size());
-    ROS_INFO_STREAM(vec_type[0].size());
-    ROS_INFO_STREAM(vec_type[0][0].size());
-    ROS_INFO_STREAM("completed--------------------------");
 
     std::cout << "received_orders_.size() " << received_orders_.size() << std::endl;
     for (int i = 0; i < received_orders_.size(); i++) {
@@ -109,65 +149,96 @@ void Competition::fill_order() {
         }
     }
     tot_order_size = received_orders_.size();
-    vector< vector< vector<string> > > vec_type(tot_order_size , vector< vector<string> > (tot_shipment_size, vector<string> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_position_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_position_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_position_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_orientation_x(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_orientation_y(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_orientation_z(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    vector< vector< vector<double> > > vec_orientation_w(tot_order_size , vector< vector<double> > (tot_shipment_size, vector<double> (tot_prod_size) ) );
-    ROS_INFO_STREAM("NEW VECTOR SIZES --------------------------");
-    ROS_INFO_STREAM(vec_type.size());
-    ROS_INFO_STREAM(vec_type[0].size());
-    ROS_INFO_STREAM(vec_type[0][0].size());
+    for(int i=0; i<tot_order_size; i++)
+    {
+        vec_type.push_back(vector<vector<string> >()); //initialize the first index with a 2D vector
+        for(int j=0; j<tot_shipment_size; j++)
+        {
+            vec_type[i].push_back(vector<string>()); //initialize the 2 index with a row of strings
+            for(int k=0; k<tot_prod_size; k++)
+            {
+                vec_type[i][j].push_back("dummy");
+            }
+        }
+    }
+
+    for(int i=0; i<tot_order_size; i++)
+    {
+        vec_position_x.push_back(vector<vector<double> >()); //initialize the first index with a 2D vector
+        vec_position_y.push_back(vector<vector<double> >());
+        vec_position_z.push_back(vector<vector<double> >());
+        vec_orientation_x.push_back(vector<vector<double> >());
+        vec_orientation_y.push_back(vector<vector<double> >());
+        vec_orientation_z.push_back(vector<vector<double> >());
+        vec_orientation_w.push_back(vector<vector<double> >());
+        for(int j=0; j<tot_shipment_size; j++)
+        {
+            vec_position_x[i].push_back(vector<double>()); //initialize the 2 index with a row of strings
+            vec_position_y[i].push_back(vector<double>());
+            vec_position_z[i].push_back(vector<double>());
+            vec_orientation_x[i].push_back(vector<double>());
+            vec_orientation_y[i].push_back(vector<double>());
+            vec_orientation_z[i].push_back(vector<double>());
+            vec_orientation_w[i].push_back(vector<double>());
+            for(int k=0; k<tot_prod_size; k++)
+            {
+                vec_position_x[i][j].push_back(0.0);
+                vec_position_y[i][j].push_back(0.0);
+                vec_position_z[i][j].push_back(0.0);
+                vec_orientation_x[i][j].push_back(0.0);
+                vec_orientation_y[i][j].push_back(0.0);
+                vec_orientation_z[i][j].push_back(0.0);
+                vec_orientation_w[i][j].push_back(0.0);
+            }
+        }
+    }
+
+
+    ROS_INFO_STREAM("NEW VECTOR SIZES ::::-----------");
+    //just for checking purposes, doesn't do anything
+    ROS_INFO_STREAM("tot_order_size : "<<tot_order_size);
+//    ROS_INFO_STREAM(vec_type.size());
+    ROS_INFO_STREAM("tot_shipment_size : "<<tot_shipment_size);
+//    ROS_INFO_STREAM(vec_type[0].size());
+    ROS_INFO_STREAM("tot_prod_size : "<<tot_prod_size);
+//    ROS_INFO_STREAM(vec_type[0][0].size());
     ROS_INFO_STREAM("completed--------------------------");
 
     // filling the vectors of orders, shipments and products
     for (int i = 0; i < tot_order_size; i++) {
-        ROS_INFO_STREAM("Filling Orders ---------------- ----------");
+        ROS_INFO_STREAM("Filling Orders ---------------");
         //fill in the vector here
         for (int j = 0; j < tot_shipment_size; j++) {
-            ROS_INFO_STREAM("Filling Shipments --------------------------");
+            ROS_INFO_STREAM("Filling Shipments ------------------");
             //fill in the vector here
             for (int k = 0; k < tot_prod_size; k++) {
                 ROS_INFO_STREAM("Filling Products --------------------------");
                 //fill in the vector here
                 vec_type[i][j][k] = received_orders_[i].shipments[j].products[k].type;
-                vec_position_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
-                vec_position_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.y;
-                vec_position_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.z ;
-                vec_orientation_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x ;
-                vec_orientation_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.y;
-                vec_orientation_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.z;
-                vec_orientation_w[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.w;
-            }
-        }
-    }
-    for (int i = 0; i < tot_order_size; i++) {
-        ROS_INFO_STREAM("DISPLAYING ALL  Orders ---------------- ----------");
-        for (int j = 0; j < tot_shipment_size; j++) {
-            ROS_INFO_STREAM("DISPLAYING ALL Shipments --------------------------");
-            for (int k = 0; k < tot_prod_size; k++) {
-                ROS_INFO_STREAM("DISPLAYING ALL  Products --------------------------");
-                ROS_INFO_STREAM(vec_type[i][j][k]);
-                ROS_INFO_STREAM(vec_position_x[i][j][k]);
-                ROS_INFO_STREAM(vec_position_y[i][j][k]);
-                ROS_INFO_STREAM(vec_position_z[i][j][k]);
-                ROS_INFO_STREAM(vec_orientation_x[i][j][k]);
-                ROS_INFO_STREAM(vec_orientation_y[i][j][k]);
-                ROS_INFO_STREAM(vec_orientation_z[i][j][k]);
-                ROS_INFO_STREAM(vec_orientation_w[i][j][k]);
+                vec_position_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.x;;
+                vec_position_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.y;;
+                vec_position_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.position.z;;
+                vec_orientation_x[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.x;;;
+                vec_orientation_y[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.y;;;
+                vec_orientation_z[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.z;;;
+                vec_orientation_w[i][j][k] = received_orders_[i].shipments[j].products[k].pose.orientation.w;;;
             }
         }
     }
 
+//    ROS_INFO_STREAM(" ------- The elements inside the vector ------- ");
+//    for (int i = 0; i < tot_order_size; i++) {
+//        for (int j = 0; j < tot_shipment_size; j++) {
+//            for (int k = 0; k < tot_prod_size; k++) {
+//                ROS_INFO_STREAM(" vec_type printed values " << vec_type[i][j][k]);
+//            }
+//        }
+//    }
 
 }
 
-//        ROS_INFO_STREAM(received_orders_[i].products.size());
 void Competition::print_parts_detected(){
-    ROS_INFO_STREAM("------------------------------------------");
+    ROS_INFO_STREAM("< | < | < | parts detected > | > | > | >");
 
     for (int i = 0; i < parts_from_camera.size(); i++)
     {
@@ -179,15 +250,8 @@ void Competition::print_parts_detected(){
         std::cout << std::endl;
         std::cout << std::endl;
     }
+    ROS_INFO_STREAM("< | < | < | ------ X ------ > | > | > | >");
 }
-
-//void Competition::print_parts_detected(){
-//    ROS_INFO_STREAM("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-//
-//    for( auto &row : parts_from_camera)
-//        for(auto &col : row)
-//            ROS_INFO_STREAM(col.type);
-//}
 
 void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx)
 {
@@ -200,12 +264,7 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
 
     geometry_msgs::PoseStamped pose_target, pose_rel;
     if(msg->models.size() != 0){
-
-        // ROS_INFO_STREAM("Camera_id : " << cam_idx);
-        // ROS_INFO_STREAM("Logical camera: '" << msg->models.size() << "' objects.");
         int part_no = 0;
-//        ROS_INFO_STREAM("Parts detected by Logical camera " << cam_idx);
-//        ROS_INFO_STREAM(" ");
         for(int i = 0; i<msg->models.size(); i++)
         {
             part_no++;
@@ -264,18 +323,7 @@ void Competition::logical_camera_callback(const nist_gear::LogicalCameraImage::C
             parts_from_camera[cam_idx][i].pose.orientation.z = pose_target.pose.orientation.z;
             parts_from_camera[cam_idx][i].pose.orientation.w = pose_target.pose.orientation.w;
 
-
-            // Output the measure
-//            ROS_INFO("'%s' in '%s' frame : X: %.2f Y: %.2f Z: %.2f - R: %.2f P: %.2f Y: %.2f",
-//                     topic.c_str(),
-//                     pose_target.header.frame_id.c_str(),
-//                     tx, ty, tz,
-//                     roll, pitch, yaw);
-
         }
-
-//        ROS_INFO_STREAM(" ");
-//        ROS_INFO_STREAM(" ");
     }
 }
 
@@ -366,3 +414,4 @@ std::string Competition::getCompetitionState() {
     ROS_INFO_STREAM("------------ competition_state_ BELOW -----------");
     return competition_state_;
 }
+

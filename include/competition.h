@@ -14,7 +14,7 @@
 #include "utils.h"
 # define MAX 40
 
-
+using namespace std;
 /**
  * @brief Competition class
  *
@@ -24,13 +24,10 @@ class Competition
 public:
     explicit Competition(ros::NodeHandle & node);
     void init();
-
     void startCompetition();
     void endCompetition();
-    void GoToPoint();
     void PickUp();
     void fill_order();
-    void prepare_vector(int,int,int);
     void competition_state_callback(const std_msgs::String::ConstPtr & msg);
     void logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx);
     void print_parts_detected();
@@ -40,7 +37,27 @@ public:
     double getStartTime();
     std::string getCompetitionState();
     stats getStats(std::string function);
-
+    //to printing vector
+    void print_vec_string(vector<vector<vector<string> > >);
+    void print_vec_double(vector<vector<vector<double> > >);
+    //initializing all vector types
+    vector<vector<vector<string> > > vec_type;
+    vector<vector<vector<double> > > vec_position_x;
+    vector<vector<vector<double> > > vec_position_y;
+    vector<vector<vector<double> > > vec_position_z;
+    vector<vector<vector<double> > > vec_orientation_x;
+    vector<vector<vector<double> > > vec_orientation_y;
+    vector<vector<vector<double> > > vec_orientation_z;
+    vector<vector<vector<double> > > vec_orientation_w;
+    //function to return the vectors to the main function
+    std::vector<std::vector<std::vector<string> > > returnVecType();
+    std::vector<std::vector<std::vector<double> > > returnVecPosX();
+    std::vector<std::vector<std::vector<double> > > returnVecPosY();
+    std::vector<std::vector<std::vector<double> > > returnVecPosZ();
+    std::vector<std::vector<std::vector<double> > > returnVecOrientX();
+    std::vector<std::vector<std::vector<double> > > returnVecOrientY();
+    std::vector<std::vector<std::vector<double> > > returnVecOrientZ();
+    std::vector<std::vector<std::vector<double> > > returnVecOrientW();
 private:
     ros::NodeHandle node_;
 
