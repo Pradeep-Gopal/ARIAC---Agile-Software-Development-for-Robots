@@ -38,10 +38,8 @@
 #define MAX_NUMBER_OF_CAMERAS 17
 std::array<std::array<part, 20>, 20>  parts_from_camera_main ;
 std::vector<std::vector<std::vector<master_struct> > > master_vector_main (10,std::vector<std::vector<master_struct> >(10,std::vector <master_struct>(20)));
-
-
-
-
+bool part_placed = false;
+int k = 0;
 
 
 int main(int argc, char ** argv) {
@@ -81,13 +79,19 @@ int main(int argc, char ** argv) {
 
     for(int i=0; i < 10;  i++) {
         for (int j = 0; j < 10; j++) {
-            for (int k = 0; k < 20; k++) {
-                if((master_vector_main[i][j][k].type == "pulley_part_red") || (master_vector_main[i][j][k].type == "pulley_part_blue") || (master_vector_main[i][j][k].type == "pulley_part_green")|| (master_vector_main[i][j][k].type == "disk_part_blue")|| (master_vector_main[i][j][k].type == "disk_part_red")|| (master_vector_main[i][j][k].type == "disk_part_green")|| (master_vector_main[i][j][k].type == "piston_part_blue")|| (master_vector_main[i][j][k].type == "piston_part_green")|| (master_vector_main[i][j][k].type == "piston_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_blue")|| (master_vector_main[i][j][k].type == "gasket_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_green"))
+            LOOP:while(k< 20)
+//            for (int k = 0; k < 20; k++)
+            {
+            ROS_INFO_STREAM("NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW part");
+            ROS_INFO_STREAM(i << j << k);
+            if((master_vector_main[i][j][k].type == "pulley_part_red") || (master_vector_main[i][j][k].type == "pulley_part_blue") || (master_vector_main[i][j][k].type == "pulley_part_green")|| (master_vector_main[i][j][k].type == "disk_part_blue")|| (master_vector_main[i][j][k].type == "disk_part_red")|| (master_vector_main[i][j][k].type == "disk_part_green")|| (master_vector_main[i][j][k].type == "piston_part_blue")|| (master_vector_main[i][j][k].type == "piston_part_green")|| (master_vector_main[i][j][k].type == "piston_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_blue")|| (master_vector_main[i][j][k].type == "gasket_part_red")|| (master_vector_main[i][j][k].type == "gasket_part_green"))
                 {
-                    for (int l = 0; l < parts_from_camera_main.size(); l++)
+                    part_placed = false;
+                    for (int l = 0 ; l < parts_from_camera_main.size(); l++)
                     {
                         for (int m = 0; m < parts_from_camera_main[i].size(); m++)
                         {
+//                            parts_from_camera_main = comp.get_parts_from_camera();
                             if ((master_vector_main[i][j][k].type == parts_from_camera_main[l][m].type) && (parts_from_camera_main[l][m].faulty == false) &&(parts_from_camera_main[l][m].picked == false))
                             {
                                 ROS_INFO_STREAM("Part found in environment");
@@ -97,15 +101,18 @@ int main(int argc, char ** argv) {
                                     std::string location = "bin_13";
                                     gantry.goToPresetLocation(gantry.start_);
                                     gantry.goToPresetLocation(gantry.bin13_);
-                                    parts_from_camera_main[l][m].picked == true;
+                                    parts_from_camera_main[l][m].picked = true;
                                 } else if (master_vector_main[i][j][k].type == "disk_part_green")
                                 {
                                     std::string location = "bin_16";
                                     gantry.goToPresetLocation(gantry.start_);
                                     gantry.goToPresetLocation(gantry.bin16_);
-                                    parts_from_camera_main[l][m].picked == true;
+                                    parts_from_camera_main[l][m].picked = true;
                                 } else if (master_vector_main[i][j][k].type == "pulley_part_red")
                                 {
+                                    parts_from_camera_main[l][m].picked = true;
+                                    ROS_INFO_STREAM(master_vector_main[i][j][k].place_part_pose);
+                                    ROS_INFO_STREAM(parts_from_camera_main[l][m].pose);
                                     std::string location = "shelf5";
                                     gantry.goToPresetLocation(gantry.start_);
                                     ROS_INFO_STREAM("Start location reached");
@@ -113,8 +120,24 @@ int main(int argc, char ** argv) {
                                     ROS_INFO_STREAM("waypont1 location reached");
                                     gantry.goToPresetLocation(gantry.waypoint_2_);
                                     ROS_INFO_STREAM("waypoint2 location reached");
-                                    parts_from_camera_main[l][m].picked == true;
+                                    gantry.goToPresetLocation(gantry.waypoint_3_);
+                                    ROS_INFO_STREAM("waypoint3 location reached");
+                                    gantry.goToPresetLocation(gantry.waypoint_4_);
+                                    ROS_INFO_STREAM("waypoint4 location reached");
+
                                     gantry.pickPart(parts_from_camera_main[l][m]);
+                                    ROS_INFO_STREAM("Part picked");
+
+                                    gantry.goToPresetLocation(gantry.waypoint_4_);
+                                    ROS_INFO_STREAM("waypoint4 location reached");
+                                    gantry.goToPresetLocation(gantry.waypoint_3_);
+                                    ROS_INFO_STREAM("waypoint3 location reached");
+                                    gantry.goToPresetLocation(gantry.waypoint_2_);
+                                    ROS_INFO_STREAM("waypoint2 location reached");
+                                    gantry.goToPresetLocation(gantry.waypoint_1_);
+                                    ROS_INFO_STREAM("waypoint1 location reached");
+                                    gantry.goToPresetLocation(gantry.start_);
+                                    ROS_INFO_STREAM("Start location reached");
 
                                     part part_in_tray;
                                     part_in_tray.type = master_vector_main[i][j][k].type;
@@ -127,11 +150,13 @@ int main(int argc, char ** argv) {
                                     part_in_tray.pose.orientation.w = master_vector_main[i][j][k].place_part_pose.orientation.w;
 
                                     gantry.placePart(part_in_tray, master_vector_main[i][j][k].agv_id);
-
+                                    k++;
+                                    goto LOOP;
                                 }
                             }
                         }
                     }
+                    ROS_INFO_STREAM("Second for loop katham");
                 }
             }
         }

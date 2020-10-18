@@ -72,6 +72,8 @@ class GantryControl {
     shelf5 shelf5_;
     waypoint_1 waypoint_1_;
     waypoint_2 waypoint_2_;
+    waypoint_3 waypoint_3_;
+    waypoint_4 waypoint_4_;
 
   private:
     std::vector<double> joint_group_positions_;

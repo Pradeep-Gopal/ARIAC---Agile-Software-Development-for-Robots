@@ -80,9 +80,19 @@ void GantryControl::init() {
 
 
 //    pulley_part_red located on waypoint_2
-    waypoint_2_.gantry = {-14.50, -4.3, 0.0};
-    waypoint_2_.left_arm = {PI, -1.64, PI/2, -PI/4, PI/2, 0};
+    waypoint_2_.gantry = {-14.5, -4.7, 0.0};
+    waypoint_2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     waypoint_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //    pulley_part_red located on waypoint_3
+    waypoint_3_.gantry = {-14.5, -4.7, 0.0};
+    waypoint_3_.left_arm = {-PI/2, -PI/4, PI/2, -PI/4, PI/2, 0};
+    waypoint_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //    pulley_part_red located on waypoint_4
+    waypoint_4_.gantry = {-14.5, -4.3, 0.0};
+    waypoint_4_.left_arm = {-2.79, -PI/4, PI/2, -PI/4, -1.39626, 0};
+    waypoint_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 
 //    pulley_part_red located on shelf5
@@ -314,9 +324,9 @@ bool GantryControl::pickPart(part part){
         if (state.attached) {
             ROS_INFO_STREAM("[Gripper] = object attached");
             //--Move arm to previous position
-            left_arm_group_.setPoseTarget(currentPose);
-            left_arm_group_.move();
-            goToPresetLocation(start_);
+//            left_arm_group_.setPoseTarget(currentPose);
+//            left_arm_group_.move();
+//            goToPresetLocation(start_);
             return true;
         }
         else {
@@ -373,7 +383,7 @@ bool GantryControl::pickPart(part part){
 
 void GantryControl::placePart(part part, std::string agv){
    auto target_pose_in_tray = getTargetWorldPose(part.pose, agv);
-    ros::Duration(3.0).sleep();
+//    ros::Duration(3.0).sleep();
     goToPresetLocation(agv2_);
     target_pose_in_tray.position.z += (ABOVE_TARGET + 1.5*model_height[part.type]);
 

@@ -88,13 +88,15 @@ void Competition::pre_kitting()
             {
 //                ROS_INFO_STREAM(shipment_vector[j].products[k].type);
                 if(shipment_vector[j].products[k].type == ("pulley_part_red") || ("pulley_part_blue") || ("pulley_part_green") || ("piston_part_red") || ("piston_part_green") || ("piston_part_blue") || ("disk_part_red") || ("disk_part_green") || ("disk_part_blue") || ("gasket_part_red") || ("gasket_part_green") || ("gasket_part_blue") ) {
-//                    ROS_INFO_STREAM("Part kidachiduchu doiiii");
-//                    ROS_INFO_STREAM(shipment_vector[j].products[k].type);
+                    ROS_INFO_STREAM("Part kidachiduchu doiiii");
+                    ROS_INFO_STREAM(shipment_vector[j].products[k].pose);
+
+
                     part part_to_be_placed;
                     part_to_be_placed.type = shipment_vector[j].products[k].type;
                     part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.x;
-                    part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.y;
-                    part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.z;
+                    part_to_be_placed.pose.position.y = shipment_vector[j].products[k].pose.position.y;
+                    part_to_be_placed.pose.position.z = shipment_vector[j].products[k].pose.position.z;
                     part_to_be_placed.pose.orientation.x = shipment_vector[j].products[k].pose.orientation.x;
                     part_to_be_placed.pose.orientation.y = shipment_vector[j].products[k].pose.orientation.y;
                     part_to_be_placed.pose.orientation.z = shipment_vector[j].products[k].pose.orientation.z;
@@ -103,8 +105,8 @@ void Competition::pre_kitting()
                     master_struct master_struct_instance;
                     master_struct_instance.type = shipment_vector[j].products[k].type;
                     master_struct_instance.place_part_pose.position.x = part_to_be_placed.pose.position.x;
-                    master_struct_instance.place_part_pose.position.y = part_to_be_placed.pose.position.x;
-                    master_struct_instance.place_part_pose.position.z = part_to_be_placed.pose.position.x;
+                    master_struct_instance.place_part_pose.position.y = part_to_be_placed.pose.position.y;
+                    master_struct_instance.place_part_pose.position.z = part_to_be_placed.pose.position.z;
                     master_struct_instance.place_part_pose.orientation.x = part_to_be_placed.pose.orientation.x;
                     master_struct_instance.place_part_pose.orientation.y = part_to_be_placed.pose.orientation.y;
                     master_struct_instance.place_part_pose.orientation.z = part_to_be_placed.pose.orientation.z;
