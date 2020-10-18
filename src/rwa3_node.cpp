@@ -98,17 +98,69 @@ int main(int argc, char ** argv) {
                                 ROS_INFO_STREAM(parts_from_camera_main[l][m].type);
                                 if (master_vector_main[i][j][k].type == "disk_part_blue")
                                 {
+                                    ROS_INFO_STREAM(master_vector_main[i][j][k].place_part_pose);
+                                    ROS_INFO_STREAM(parts_from_camera_main[l][m].pose);
                                     std::string location = "bin_13";
                                     gantry.goToPresetLocation(gantry.start_);
+                                    ROS_INFO_STREAM("Start location reached");
                                     gantry.goToPresetLocation(gantry.bin13_);
+                                    ROS_INFO_STREAM("bin13 location reached");
                                     parts_from_camera_main[l][m].picked = true;
+                                    gantry.pickPart(parts_from_camera_main[l][m]);
+                                    ROS_INFO_STREAM("Part picked");
+                                    gantry.goToPresetLocation(gantry.bin13_);
+                                    ROS_INFO_STREAM("bin13 location reached");
+
+                                    gantry.goToPresetLocation(gantry.start_);
+                                    ROS_INFO_STREAM("Start location reached");
+
+                                    part part_in_tray;
+                                    part_in_tray.type = master_vector_main[i][j][k].type;
+                                    part_in_tray.pose.position.x = master_vector_main[i][j][k].place_part_pose.position.x;
+                                    part_in_tray.pose.position.y = master_vector_main[i][j][k].place_part_pose.position.y;
+                                    part_in_tray.pose.position.z = master_vector_main[i][j][k].place_part_pose.position.z;
+                                    part_in_tray.pose.orientation.x = master_vector_main[i][j][k].place_part_pose.orientation.x;
+                                    part_in_tray.pose.orientation.y = master_vector_main[i][j][k].place_part_pose.orientation.y;
+                                    part_in_tray.pose.orientation.z = master_vector_main[i][j][k].place_part_pose.orientation.z;
+                                    part_in_tray.pose.orientation.w = master_vector_main[i][j][k].place_part_pose.orientation.w;
+
+                                    gantry.placePart(part_in_tray, master_vector_main[i][j][k].agv_id);
+                                    k++;
+                                    goto LOOP;
+
                                 } else if (master_vector_main[i][j][k].type == "disk_part_green")
                                 {
+                                    ROS_INFO_STREAM(master_vector_main[i][j][k].place_part_pose);
+                                    ROS_INFO_STREAM(parts_from_camera_main[l][m].pose);
                                     std::string location = "bin_16";
                                     gantry.goToPresetLocation(gantry.start_);
+                                    ROS_INFO_STREAM("Start location reached");
                                     gantry.goToPresetLocation(gantry.bin16_);
+                                    ROS_INFO_STREAM("bin16 location reached");
                                     parts_from_camera_main[l][m].picked = true;
-                                } else if (master_vector_main[i][j][k].type == "pulley_part_red")
+                                    gantry.pickPart(parts_from_camera_main[l][m]);
+                                    ROS_INFO_STREAM("Part picked");
+                                    gantry.goToPresetLocation(gantry.bin16_);
+                                    ROS_INFO_STREAM("bin16 location reached");
+
+                                    gantry.goToPresetLocation(gantry.start_);
+                                    ROS_INFO_STREAM("Start location reached");
+
+                                    part part_in_tray;
+                                    part_in_tray.type = master_vector_main[i][j][k].type;
+                                    part_in_tray.pose.position.x = master_vector_main[i][j][k].place_part_pose.position.x;
+                                    part_in_tray.pose.position.y = master_vector_main[i][j][k].place_part_pose.position.y;
+                                    part_in_tray.pose.position.z = master_vector_main[i][j][k].place_part_pose.position.z;
+                                    part_in_tray.pose.orientation.x = master_vector_main[i][j][k].place_part_pose.orientation.x;
+                                    part_in_tray.pose.orientation.y = master_vector_main[i][j][k].place_part_pose.orientation.y;
+                                    part_in_tray.pose.orientation.z = master_vector_main[i][j][k].place_part_pose.orientation.z;
+                                    part_in_tray.pose.orientation.w = master_vector_main[i][j][k].place_part_pose.orientation.w;
+
+                                    gantry.placePart(part_in_tray, master_vector_main[i][j][k].agv_id);
+                                    k++;
+                                    goto LOOP;
+                                }
+                                else if (master_vector_main[i][j][k].type == "pulley_part_red")
                                 {
                                     parts_from_camera_main[l][m].picked = true;
                                     ROS_INFO_STREAM(master_vector_main[i][j][k].place_part_pose);

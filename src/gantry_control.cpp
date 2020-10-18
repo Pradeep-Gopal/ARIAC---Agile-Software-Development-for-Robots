@@ -63,15 +63,15 @@ void GantryControl::init() {
 //    agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
 //    agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-// BIN 13 preset location
-    bin13_.gantry = {5.57, 1.82,0.0};
-    bin13_.left_arm = {-1.89, -1.38,0.5,-0.08,0.00,0.00};
-    bin13_.right_arm = {-0.02,-0.01,0.05,0.08,0.00,0.00};
+// BIN 16 preset location
+    bin16_.gantry = {5.00, 1.95,0.0};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
-//    disk_part_green located in bin16
-    bin16_.gantry = {2.88, 1.82,0.0};
-    bin16_.left_arm = {-1.89, -1.38,0.5,-0.08,0.00,0.00};
-    bin16_.right_arm = {-0.02,-0.01,0.05,0.08,0.00,0.00};
+//    disk_part_green located in bin13
+    bin13_.gantry = {2.05, 2.3,0.0};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 //    pulley_part_red located on waypoint_1
     waypoint_1_.gantry = {0.0, -4.7, 0.0};
