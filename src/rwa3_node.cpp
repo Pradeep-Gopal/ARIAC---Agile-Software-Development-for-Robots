@@ -157,24 +157,33 @@ int main(int argc, char ** argv) {
                 else if (diff_vec_size ==1) {
                     ROS_INFO_STREAM("ONE PART REMOVED");
                     if(part_to_find=="disk_part_blue"){
-                        //got to bin 13
+                        //go to bin 13
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>GOING TO BIN 13");
                         gantry.goToPresetLocation(gantry.start_);
                         gantry.goToPresetLocation(gantry.bin13_);
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the blue part");
                         gantry.pickPart(parts_from_camera_main[i][j]);
+                        gantry.goToPresetLocation(gantry.bin13_);
+                        ROS_INFO_STREAM("bin13 location reached");
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>going back to the start position");
                         gantry.goToPresetLocation(gantry.start_);
+                        gantry.deactivateGripper("left_arm");
+                        ROS_INFO_STREAM("Start location reached");
+
                     }
                     else if(part_to_find=="disk_part_green"){
                         //go to bin 16
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>GOING TO BIN 16");
-//                        gantry.goToPresetLocation(gantry.start_);
+                        gantry.goToPresetLocation(gantry.start_);
                         gantry.goToPresetLocation(gantry.bin16_);
-                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the green part");
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the blue part");
                         gantry.pickPart(parts_from_camera_main[i][j]);
+                        gantry.goToPresetLocation(gantry.bin16_);
+                        ROS_INFO_STREAM("bin16 location reached");
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>going back to the start position");
                         gantry.goToPresetLocation(gantry.start_);
+                        ROS_INFO_STREAM("Start location reached");
+                        gantry.deactivateGripper("left_arm");
                     }
                 }
                 else{
