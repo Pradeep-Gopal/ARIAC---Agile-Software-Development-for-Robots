@@ -153,6 +153,32 @@ int main(int argc, char ** argv) {
                     for(int keep_insert;keep_insert<diff_vec_size-1;keep_insert++){
                         returned_vec_string_TYPE[0][0].push_back(part_to_find);
                     }
+                    if (part_to_find=="pulley_part_red"){
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>GOING TO SHELF 15");
+                        gantry.goToPresetLocation(gantry.start_);
+                        ROS_INFO_STREAM("Start location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_1_);
+                        ROS_INFO_STREAM("waypont1 location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_2_);
+                        ROS_INFO_STREAM("waypoint2 location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_3_);
+                        ROS_INFO_STREAM("waypoint3 location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_4_);
+                        ROS_INFO_STREAM("waypoint4 location reached");
+
+                        gantry.pickPart(parts_from_camera_main[i][j]);
+                        ROS_INFO_STREAM("Part picked");
+
+                        gantry.goToPresetLocation(gantry.waypoint_4_);
+                        ROS_INFO_STREAM("waypoint4 location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_3_);
+                        ROS_INFO_STREAM("waypoint3 location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_2_);
+                        ROS_INFO_STREAM("waypoint2 location reached");
+                        gantry.goToPresetLocation(gantry.waypoint_1_);
+                        ROS_INFO_STREAM("waypoint1 location reached");
+                        gantry.goToPresetLocation(gantry.start_);
+                    }
                 }
                 else if (diff_vec_size ==1) {
                     ROS_INFO_STREAM("ONE PART REMOVED");
