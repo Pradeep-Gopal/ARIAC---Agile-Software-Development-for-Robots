@@ -34,11 +34,12 @@
 #include "gantry_control.h"
 
 #include <tf2/LinearMath/Quaternion.h>
-
+using namespace std;
 #define MAX_NUMBER_OF_CAMERAS 17
-
+std::array<std::array<part, 20>, 20>  parts_from_camera_main ;
 //hard coding the x,y and z dimensions of the 3D vector, which can be obtained from the class
 //through getter functions. -- not hard.
+std::vector<std::vector<std::vector<string> > > returned_vec_string_TYPE (1,std::vector<std::vector<string> >(1,std::vector <string>(4)));
 std::vector<std::vector<std::vector<string> > > returned_vec_string (1,std::vector<std::vector<string> >(1,std::vector <string>(4)));
 std::vector<std::vector<std::vector<double> > > returned_vec_double (1,std::vector<std::vector<double> >(1,std::vector <double>(4)));
 int main(int argc, char ** argv) {
@@ -68,8 +69,8 @@ int main(int argc, char ** argv) {
     comp.getClock();
     GantryControl gantry(node);
     gantry.init();
-    returned_vec_string = comp.returnVecType();
-    comp.print_vec_string(returned_vec_string);//for printing type, which is of string data-type
+    returned_vec_string_TYPE = comp.returnVecType();
+    comp.print_vec_string(returned_vec_string_TYPE);//for printing type, which is of string data-type
     returned_vec_double = comp.returnVecPosX();
     comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
     returned_vec_double = comp.returnVecPosY();
@@ -86,16 +87,57 @@ int main(int argc, char ** argv) {
     comp.print_vec_double(returned_vec_double);//for printing double data-type vectors
     ROS_INFO_STREAM("------- Going to Preset Locations -------");
     //going to preset locations
-    gantry.goToPresetLocation(gantry.start_);
+//    gantry.goToPresetLocation(gantry.start_);
 //    gantry.goToPresetLocation(gantry.bin13_);
-    gantry.goToPresetLocation(gantry.bin16_);
+//    gantry.goToPresetLocation(gantry.bin16_);
     //next three are waypoints before you reach shelf
-    gantry.goToPresetLocation(gantry.start_);
+//    gantry.goToPresetLocation(gantry.start_);
 //    gantry.goToPresetLocation(gantry.waypoint_1_);
 //    gantry.goToPresetLocation(gantry.waypoint_2_);
 //    gantry.goToPresetLocation(gantry.shelf5_);
+    ROS_INFO_STREAM("PRINTING VECTOR ELEMENTS ONLY");
+    for(int i = 0;i<1;i++){
+        for(int j=0;j<1;j++) {
+            for (int k = 0; k < 4; k++) {
+                ROS_INFO_STREAM(returned_vec_string_TYPE[i][j][k]);
+            }
+        }
+    }
+    ROS_INFO_STREAM("------");
+    parts_from_camera_main = comp.get_parts_from_camera(); //this is a 20 by 20 - 2 dimensional vector
+    string part_to_find;
+    string s;
+    int before_removal = 0;
+    int after_removal = 0;
+    int diff_vec_size = 0;
+    for(int i = 0;i<=10;i++){
+        for(int j=0;j<=10;j++){
+            string line = parts_from_camera_main[i][j].type;
+            if (!line.empty()) {
+                ROS_INFO_STREAM(parts_from_camera_main[i][j].type);
+                part_to_find = parts_from_camera_main[i][j].type;
+                before_removal = returned_vec_string_TYPE[0][0].size();
+                returned_vec_string_TYPE[0][0].erase(std::remove(returned_vec_string_TYPE[0][0].begin(), returned_vec_string_TYPE[0][0].end(), part_to_find), returned_vec_string_TYPE[0][0].end());
+                after_removal = returned_vec_string_TYPE[0][0].size();
+                diff_vec_size = after_removal - before_removal;
+                if (diff_vec_size !=1){
+                    for(int keep_insert;keep_insert<diff_vec_size;keep_insert++){
+                        returned_vec_string_TYPE[0][0].push_back(part_to_find);
+                    }
+                }
+                else {
+                    if (std::find(returned_vec_string_TYPE[0][0].begin(), returned_vec_string_TYPE[0][0].end(),part_to_find) != returned_vec_string_TYPE[0][0].end()) {
+                        ROS_INFO_STREAM("FOUND ++++++++++++++++++++++++");
+                    } else{
+                        ROS_INFO_STREAM("NOT FOUND -------------------");
+                }
+                }
 
-    //--You should receive the following information from a camera
+            }
+        }
+    }
+    ROS_INFO_STREAM("ALL DONE");
+    //--You shold receive the following information from a camera
 //    part my_part;
 //    my_part.type = "pulley_part_red";
 //    my_part.pose.position.x = 4.365789;

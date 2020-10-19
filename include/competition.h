@@ -58,6 +58,8 @@ public:
     std::vector<std::vector<std::vector<double> > > returnVecOrientY();
     std::vector<std::vector<std::vector<double> > > returnVecOrientZ();
     std::vector<std::vector<std::vector<double> > > returnVecOrientW();
+
+    std::array<std::array<part, 20>, 20> get_parts_from_camera();
 private:
     ros::NodeHandle node_;
 

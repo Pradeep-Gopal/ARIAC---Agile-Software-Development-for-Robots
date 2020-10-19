@@ -415,3 +415,8 @@ std::string Competition::getCompetitionState() {
     return competition_state_;
 }
 
+
+std::array<std::array<part, 20>, 20> Competition::get_parts_from_camera()
+{
+    return parts_from_camera;
+}
