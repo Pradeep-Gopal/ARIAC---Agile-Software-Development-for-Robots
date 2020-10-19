@@ -34,7 +34,7 @@ sensors:
   logical_camera_2: # left_topshelf_2
     type: logical_camera
     pose:
-      xyz: [-13.434241, 3.020797, 2.49]
+      xyz: [-13.332640, 3.020797, 2.49]
       rpy: [0, 'pi/2', 'pi/2']
 
   logical_camera_3: 
