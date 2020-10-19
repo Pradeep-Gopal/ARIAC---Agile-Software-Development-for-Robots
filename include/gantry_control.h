@@ -66,11 +66,15 @@ class GantryControl {
     start start_;
     bin3 bin3_;
     agv2 agv2_;
+    agv2_drop agv2_drop_;
     bin13 bin13_;
     bin16 bin16_;
     shelf5 shelf5_;
-    waypoint1 waypoint_1_;
-    waypoint2  waypoint_2_;
+
+    waypoint_1 waypoint_1_;
+    waypoint_2 waypoint_2_;
+    waypoint_3 waypoint_3_;
+    waypoint_4 waypoint_4_;
 
   private:
     std::vector<double> joint_group_positions_;

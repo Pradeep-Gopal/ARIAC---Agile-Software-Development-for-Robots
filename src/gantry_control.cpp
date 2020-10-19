@@ -40,38 +40,63 @@ void GantryControl::init() {
 
     //--start location
 
-//    disk_part_blue located in bin13
-    bin13_.gantry = {5.57, 1.82,0.0};
-    bin13_.left_arm = {-1.89, -1.38,0.5,-0.08,0.00,0.00};
-    bin13_.right_arm = {-0.02,-0.01,0.05,0.08,0.00,0.00};
-//    disk_part_green located in bin16
-    bin16_.gantry = {2.88, 1.82,0.0};
-    bin16_.left_arm = {-1.89, -1.38,0.5,-0.08,0.00,0.00};
-    bin16_.right_arm = {-0.02,-0.01,0.05,0.08,0.00,0.00};
-    //    pulley_part_red located on waypoint_1
-    waypoint_1_.gantry = {-0.72, -7.0,0.0};
+// BIN 16 preset location
+    bin16_.gantry = {5.00, 1.95,0.0};
+    bin16_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin16_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//    disk_part_green located in bin13
+    bin13_.gantry = {2.05, 2.3,0.0};
+    bin13_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    bin13_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+//    pulley_part_red located on waypoint_1
+    waypoint_1_.gantry = {0.0, -4.7, 0.0};
     waypoint_1_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     waypoint_1_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
-    //    pulley_part_red located on waypoint_2
-    waypoint_2_.gantry = {-14.00, -7.0,0.0};
+
+//    pulley_part_red located on waypoint_2
+    waypoint_2_.gantry = {-14.5, -4.7, 0.0};
     waypoint_2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     waypoint_2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //    pulley_part_red located on waypoint_3
+    waypoint_3_.gantry = {-14.5, -4.7, 0.0};
+    waypoint_3_.left_arm = {-PI/2, -PI/4, PI/2, -PI/4, PI/2, 0};
+    waypoint_3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //    pulley_part_red located on waypoint_4
+    waypoint_4_.gantry = {-14.5, -4.3, 0.0};
+    waypoint_4_.left_arm = {-2.79, -PI/4, PI/2, -PI/4, -1.39626, 0};
+    waypoint_4_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
 //    pulley_part_red located on shelf5
     shelf5_.gantry = {-14.00, -4.76,0.0};
     shelf5_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     shelf5_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+
+//    Start location
     start_.gantry = {0,0,0};
     start_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     start_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+
+//    Bin3 location
     bin3_.gantry = {4.0, -1.1, 0.};
     bin3_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     bin3_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
+
+//    Agv2 location
     agv2_.gantry = {0.6, 6.9, PI};
     agv2_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
     agv2_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
+
+    //    Agv2 Drop location
+    agv2_drop_.gantry = {1, 6.9, PI};
+    agv2_drop_.left_arm = {0.0, -PI/4, PI/2, -PI/4, PI/2, 0};
+    agv2_drop_.right_arm = {PI, -PI/4, PI/2, -PI/4, PI/2, 0};
 
 
 

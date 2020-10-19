@@ -54,7 +54,7 @@ typedef struct PresetLocation {
     std::vector<double> gantry;
     std::vector<double> left_arm;
     std::vector<double> right_arm;
-} start, bin3, agv2, bin13, bin16, shelf5,waypoint1,waypoint2;
+} start, bin3, bin16, bin13, shelf5, agv2, agv2_drop, shelf5, waypoint_1, waypoint_2, waypoint_3, waypoint_4;
 
 //define here
 

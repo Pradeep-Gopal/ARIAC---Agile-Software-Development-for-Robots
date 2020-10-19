@@ -156,14 +156,30 @@ int main(int argc, char ** argv) {
                 }
                 else if (diff_vec_size ==1) {
                     ROS_INFO_STREAM("ONE PART REMOVED");
-                    if (std::find(returned_vec_string_TYPE[0][0].begin(), returned_vec_string_TYPE[0][0].end(),
-                                  part_to_find) != returned_vec_string_TYPE[0][0].end()) {
-                        ROS_INFO_STREAM("FOUND ++++++++++++++++++++++++");
-                    }// end of the if case
-                    else {
-                        ROS_INFO_STREAM("NOT FOUND -------------------");
-                    }// end of the else case
-                }//for vector size differences of 1
+                    if(part_to_find=="disk_part_blue"){
+                        //got to bin 13
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>GOING TO BIN 13");
+                        gantry.goToPresetLocation(gantry.start_);
+                        gantry.goToPresetLocation(gantry.bin13_);
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the blue part");
+                        gantry.pickPart(parts_from_camera_main[i][j]);
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>going back to the start position");
+                        gantry.goToPresetLocation(gantry.start_);
+                    }
+                    else if(part_to_find=="disk_part_green"){
+                        //go to bin 16
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>GOING TO BIN 16");
+//                        gantry.goToPresetLocation(gantry.start_);
+                        gantry.goToPresetLocation(gantry.bin16_);
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the green part");
+                        gantry.pickPart(parts_from_camera_main[i][j]);
+                        ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>going back to the start position");
+                        gantry.goToPresetLocation(gantry.start_);
+                    }
+                }
+                else{
+                    ROS_INFO_STREAM("THERE WAS NOTHING TO REMOVE");
+                }
 
             }//check if line received from the 2 dimensional array is empty
         }// end of the inner for loop with j
