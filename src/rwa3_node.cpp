@@ -163,8 +163,6 @@ int main(int argc, char ** argv) {
                         gantry.goToPresetLocation(gantry.bin13_);
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the blue part");
                         gantry.pickPart(parts_from_camera_main[i][j]);
-                        gantry.goToPresetLocation(gantry.bin13_);
-                        ROS_INFO_STREAM("bin13 location reached");
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>going back to the start position");
                         gantry.goToPresetLocation(gantry.start_);
                         gantry.deactivateGripper("left_arm");
@@ -178,8 +176,6 @@ int main(int argc, char ** argv) {
                         gantry.goToPresetLocation(gantry.bin16_);
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>picking up the blue part");
                         gantry.pickPart(parts_from_camera_main[i][j]);
-                        gantry.goToPresetLocation(gantry.bin16_);
-                        ROS_INFO_STREAM("bin16 location reached");
                         ROS_INFO_STREAM(">>>>>>>>>>>>>>>>>>>>>>>>>>>going back to the start position");
                         gantry.goToPresetLocation(gantry.start_);
                         ROS_INFO_STREAM("Start location reached");
