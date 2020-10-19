@@ -103,40 +103,73 @@ int main(int argc, char ** argv) {
             }
         }
     }
-    ROS_INFO_STREAM("------");
+    ROS_INFO_STREAM("--------------------------------for loop starts now ----------------------------------");
     parts_from_camera_main = comp.get_parts_from_camera(); //this is a 20 by 20 - 2 dimensional vector
     string part_to_find;
     string s;
     int before_removal = 0;
     int after_removal = 0;
     int diff_vec_size = 0;
-    for(int i = 0;i<=10;i++){
-        for(int j=0;j<=10;j++){
+    int vec_idx=0;
+    bool vec_flag = false; //boolean to check if all the orders have been completed
+    do{
+    for(int i = 0;i<=20;i++){
+        for(int j=0;j<=20;j++){
             string line = parts_from_camera_main[i][j].type;
             if (!line.empty()) {
-                ROS_INFO_STREAM(parts_from_camera_main[i][j].type);
+                diff_vec_size=0; //resetting the value
                 part_to_find = parts_from_camera_main[i][j].type;
+                ROS_INFO_STREAM("The part from the logical camera detected : "<<part_to_find);
                 before_removal = returned_vec_string_TYPE[0][0].size();
+                if (before_removal == 0){
+                    ROS_INFO_STREAM("XXXXXXXXXXXXXXXX=== BREAK OUT OF THE LOOP ===XXXXXXXXXXXXXXXX");
+                    vec_flag; // should break out of the loop
+                    break;
+                }
+                ROS_INFO_STREAM("before_removal the order had > "<<before_removal);
+                ROS_INFO_STREAM("VECTOR BEFORE REMOVAL");
+                ROS_INFO_STREAM("<<<<<<begin>>>>>>");
+                for(vec_idx=0; vec_idx < returned_vec_string_TYPE[0][0].size(); vec_idx++){
+                    //printing vector before removal of the parts
+                    ROS_INFO_STREAM(returned_vec_string_TYPE[0][0].at(vec_idx));
+                }
+                ROS_INFO_STREAM("<<<<<<end>>>>>>");
                 returned_vec_string_TYPE[0][0].erase(std::remove(returned_vec_string_TYPE[0][0].begin(), returned_vec_string_TYPE[0][0].end(), part_to_find), returned_vec_string_TYPE[0][0].end());
                 after_removal = returned_vec_string_TYPE[0][0].size();
-                diff_vec_size = after_removal - before_removal;
+                ROS_INFO_STREAM("after_removal the order has > "<<after_removal);
+                ROS_INFO_STREAM("VECTOR AFTER REMOVAL");
+                ROS_INFO_STREAM("<<<<<<begin>>>>>>");
+                for(vec_idx=0; vec_idx < returned_vec_string_TYPE[0][0].size(); vec_idx++){
+                    //printing vector after removal of the parts
+                    ROS_INFO_STREAM(returned_vec_string_TYPE[0][0].at(vec_idx));
+                }
+                ROS_INFO_STREAM("<<<<<<end>>>>>>");
+                //checking if all orders have been completed
+                diff_vec_size = abs(before_removal - after_removal);
+                ROS_INFO_STREAM("diff_vec_size");
+                ROS_INFO_STREAM(diff_vec_size);
                 if (diff_vec_size !=1){
-                    for(int keep_insert;keep_insert<diff_vec_size;keep_insert++){
+                    ROS_INFO_STREAM("TWO PARTS REMOVED");
+                    for(int keep_insert;keep_insert<diff_vec_size-1;keep_insert++){
                         returned_vec_string_TYPE[0][0].push_back(part_to_find);
                     }
                 }
-                else {
-                    if (std::find(returned_vec_string_TYPE[0][0].begin(), returned_vec_string_TYPE[0][0].end(),part_to_find) != returned_vec_string_TYPE[0][0].end()) {
+                else if (diff_vec_size ==1) {
+                    ROS_INFO_STREAM("ONE PART REMOVED");
+                    if (std::find(returned_vec_string_TYPE[0][0].begin(), returned_vec_string_TYPE[0][0].end(),
+                                  part_to_find) != returned_vec_string_TYPE[0][0].end()) {
                         ROS_INFO_STREAM("FOUND ++++++++++++++++++++++++");
-                    } else{
+                    }// end of the if case
+                    else {
                         ROS_INFO_STREAM("NOT FOUND -------------------");
-                }
-                }
+                    }// end of the else case
+                }//for vector size differences of 1
 
-            }
-        }
-    }
-    ROS_INFO_STREAM("ALL DONE");
+            }//check if line received from the 2 dimensional array is empty
+        }// end of the inner for loop with j
+    }//end of the outer for loop with i
+    }while (!vec_flag);//end of the do-while loop
+    ROS_INFO_STREAM("ALL DONE"); // out of all the loops
     //--You shold receive the following information from a camera
 //    part my_part;
 //    my_part.type = "pulley_part_red";
