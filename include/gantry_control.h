@@ -62,14 +62,18 @@ class GantryControl {
     void deactivateGripper(std::string gripper_id);
     nist_gear::VacuumGripperState getGripperState(std::string arm_name);
     geometry_msgs::Pose getTargetWorldPose(geometry_msgs::Pose target, std::string agv);
+    geometry_msgs::Pose getTargetWorldPose_dummy(geometry_msgs::Pose target,
+                                                                std::string agv);
 
     //--preset locations;
     start start_;
     bin3 bin3_;
     agv2 agv2_;
+    agv2_drop agv2_drop_;
     bin13 bin13_;
     bin16 bin16_;
     shelf5 shelf5_;
+
     waypoint_1 waypoint_1_;
     waypoint_2 waypoint_2_;
     waypoint_3 waypoint_3_;

@@ -27,7 +27,9 @@ public:
     void endCompetition();
     void competition_state_callback(const std_msgs::String::ConstPtr & msg);
     void logical_camera_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg, int cam_idx);
+    void quality_control_sensor_1_subscriber_callback(const nist_gear::LogicalCameraImage::ConstPtr & msg);
     std::array<std::array<part, 20>, 20> get_parts_from_camera();
+    part get_quality_sensor_status();
     std::vector<std::vector<std::vector<master_struct> > > get_master_vector();
     void print_parts_detected();
     void print_parts_to_pick();
@@ -52,6 +54,7 @@ private:
     ros::Subscriber competition_state_subscriber_;
     ros::Subscriber competition_clock_subscriber_;
     ros::Subscriber orders_subscriber_;
+    ros::Subscriber quality_control_sensor_1_subscriber_;
     std::vector<nist_gear::Order> received_orders_;
 
     // to collect statistics
