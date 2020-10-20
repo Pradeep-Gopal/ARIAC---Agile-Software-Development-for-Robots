@@ -33,6 +33,7 @@
 #include "utils.h"
 #include "gantry_control.h"
 
+#include <nist_gear/AGVControl.h>
 #include <tf2/LinearMath/Quaternion.h>
 
 #define MAX_NUMBER_OF_CAMERAS 17
@@ -41,6 +42,50 @@ std::vector<std::vector<std::vector<master_struct> > > master_vector_main (10,st
 bool part_placed = false;
 int k = 0;
 part faulty_part;
+
+// AVG id(= 1,2) to identify what AVG to submit to
+// shipment_type is the order type
+bool submitOrder(int AVG_id, std::string shipment_type){
+    ROS_INFO("[submitOrder] Submitting order via AVG");
+
+    // Create a node to call service from. Would be better to use one existing node
+    // rather than creating a new one every time
+    ros::NodeHandle node;
+
+    // Create a Service client for the correct service, i.e. '/ariac/agv{AVG_id}'
+    ros::ServiceClient avg_client;
+
+    // Assign the service client to the correct service
+    if(AVG_id == 1){
+        avg_client = node.serviceClient<nist_gear::AGVControl>("/ariac/agv1");
+    }else if(AVG_id == 2){
+        avg_client = node.serviceClient<nist_gear::AGVControl>("/ariac/agv2");
+    }else{
+        ROS_ERROR_STREAM("[submitOrder] No AVG with id " << AVG_id <<". Valid ids are 1 and 2 only");
+    }
+
+    // Wait for client to start
+    if (!avg_client.exists()) {
+        avg_client.waitForExistence();
+    }
+
+    // Debug what you're doing
+    ROS_INFO_STREAM("[submitOrder] Sending AVG " << AVG_id << " to submit order");
+
+    // Create the message and assign the shipment type to it
+    nist_gear::AGVControl srv;
+    srv.request.shipment_type = shipment_type;
+
+    // Send message and retrieve response
+    avg_client.call(srv);
+    if (!srv.response.success) {  // If not successful, print out why.
+        ROS_ERROR_STREAM("[submitOrder]  Failed to submit: " << srv.response.message);
+    } else {
+        ROS_INFO("[submitOrder] Submitted");
+    }
+
+    return srv.response.success;
+}
 
 
 int main(int argc, char ** argv) {
@@ -357,6 +402,8 @@ int main(int argc, char ** argv) {
     //--Go place the part
 //    gantry.placePart(part_in_tray, "agv2");
 
+    gantry.goToPresetLocation(gantry.start_);
+    submitOrder(2, "order_0");
     ROS_INFO_STREAM("Mangathaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa DaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 
     comp.endCompetition();
