@@ -96,7 +96,6 @@ void Competition::pre_kitting()
                     ROS_INFO_STREAM("Part kidachiduchu doiiii");
                     ROS_INFO_STREAM(shipment_vector[j].products[k].pose);
 
-
                     part part_to_be_placed;
                     part_to_be_placed.type = shipment_vector[j].products[k].type;
                     part_to_be_placed.pose.position.x = shipment_vector[j].products[k].pose.position.x;

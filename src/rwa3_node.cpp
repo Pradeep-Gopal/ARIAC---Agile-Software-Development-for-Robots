@@ -41,6 +41,7 @@ std::array<std::array<part, 20>, 20>  parts_from_camera_main ;
 std::vector<std::vector<std::vector<master_struct> > > master_vector_main (10,std::vector<std::vector<master_struct> >(10,std::vector <master_struct>(20)));
 bool part_placed = false;
 int k = 0;
+const double flip = -3.14159;
 part faulty_part;
 
 // AVG id(= 1,2) to identify what AVG to submit to
@@ -308,8 +309,6 @@ int main(int argc, char ** argv) {
                                     ROS_INFO_STREAM("waypoint2 location reached");
                                     gantry.goToPresetLocation(gantry.waypoint_1_);
                                     ROS_INFO_STREAM("waypoint1 location reached");
-                                    gantry.goToPresetLocation(gantry.start_);
-                                    ROS_INFO_STREAM("Start location reached");
 
                                     part part_in_tray;
                                     part_in_tray.type = master_vector_main[i][j][k].type;
@@ -321,13 +320,78 @@ int main(int argc, char ** argv) {
                                     part_in_tray.pose.orientation.z = master_vector_main[i][j][k].place_part_pose.orientation.z;
                                     part_in_tray.pose.orientation.w = master_vector_main[i][j][k].place_part_pose.orientation.w;
 
-                                    gantry.placePart(part_in_tray, master_vector_main[i][j][k].agv_id);
-                                    ROS_INFO_STREAM("Part placed");
+                                    tf2::Quaternion q(
+                                            part_in_tray.pose.orientation.x,
+                                            part_in_tray.pose.orientation.y,
+                                            part_in_tray.pose.orientation.z,
+                                            part_in_tray.pose.orientation.w);
 
-                                    if(master_vector_main[i][j][k].agv_id == "agv2")
+                                    // 3x3 Rotation matrix from quaternion
+                                    tf2::Matrix3x3 m1(q);
+
+                                    // Roll Pitch and Yaw from rotation matrix
+                                    double roll, pitch, yaw;
+                                    m1.getRPY(roll, pitch, yaw);
+                                    ROS_INFO_STREAM("Rollllllllllllllllllllllllllllllllllllllllllll" << roll);
+                                    ROS_INFO_STREAM("Flippppppppppppppppppppppppppppppppppppppppppp" << flip);
+                                    roll = (double)roll;
+                                    if(part_in_tray.pose.orientation.x == 1)
                                     {
-                                        gantry.goToPresetLocation(gantry.agv2_);
-                                        ROS_INFO_STREAM("AGV2 location reached");
+                                        gantry.activateGripper("right_arm");
+                                        ros::Duration(2).sleep();
+
+                                        ROS_INFO_STREAM("Right Gripper activated");
+                                        ROS_INFO_STREAM("Thirupi Podu Dosaiiiiiii");
+                                        gantry.goToPresetLocation(gantry.agv2_flip_);
+                                        ROS_INFO_STREAM("AGV 2 location reached");
+//
+//                                        ros::Duration(0.5).sleep();
+//                                        ROS_INFO_STREAM("Right Gripper activated");
+                                        gantry.goToPresetLocation(gantry.pose_change_1);
+                                        ROS_INFO_STREAM("Flipping pose1 reached");
+                                        gantry.goToPresetLocation(gantry.pose_change_2);
+                                        ROS_INFO_STREAM("Flipping pose2 reached");
+                                        gantry.deactivateGripper("left_arm");
+                                        ros::Duration(2).sleep();
+                                        ROS_INFO_STREAM("Left Gripper Disabled");
+                                        gantry.goToPresetLocation(gantry.flip_target_);
+                                        ROS_INFO_STREAM("Reached AGV");
+
+                                        roll = 0; //Setting roll back to zero after flipping
+                                        tf2::Quaternion myQuaternion;
+                                        myQuaternion.setRPY(roll, pitch, yaw);  // Create this quaternion from roll/pitch/yaw (in radians)
+                                        ROS_INFO_STREAM("Printing Roll pitch yaw values");
+                                        ROS_INFO_STREAM(roll << pitch << yaw);
+                                        ROS_INFO_STREAM("Printing Quaternion values");
+                                        ROS_INFO_STREAM(q[0]);
+                                        ROS_INFO_STREAM(q[1]);
+                                        ROS_INFO_STREAM(q[2]);
+                                        ROS_INFO_STREAM(q[3]);
+
+//                                        part_in_tray.pose.orientation.x = q[0];
+//                                        part_in_tray.pose.orientation.y = q[1];
+//                                        part_in_tray.pose.orientation.z = q[2];
+//                                        part_in_tray.pose.orientation.w = q[3];
+
+                                        part_in_tray.pose.orientation.x = 0;
+                                        part_in_tray.pose.orientation.y = 0;
+                                        part_in_tray.pose.orientation.z = 0;
+                                        part_in_tray.pose.orientation.w = 1;
+
+                                        gantry.placePart_right_arm(part_in_tray, master_vector_main[i][j][k].agv_id);
+                                        ROS_INFO_STREAM("Part placed");
+                                    }
+
+                                    else {
+                                        gantry.goToPresetLocation(gantry.start_);
+                                        ROS_INFO_STREAM("Start location reached");
+                                        gantry.placePart(part_in_tray, master_vector_main[i][j][k].agv_id);
+                                        ROS_INFO_STREAM("Part placed");
+                                        if(master_vector_main[i][j][k].agv_id == "agv2")
+                                        {
+                                            gantry.goToPresetLocation(gantry.agv2_);
+                                            ROS_INFO_STREAM("AGV2 location reached");
+                                        }
                                     }
 
                                     faulty_part = comp.get_quality_sensor_status();
@@ -372,38 +436,8 @@ int main(int argc, char ** argv) {
         }
     }
 
-//    gantry.goToPresetLocation(gantry.start_);
-//    gantry.goToPresetLocation(gantry.bin3_);
-//
-//    //--You should receive the following information from a camera
-//    part my_part;
-//    my_part.type = "pulley_part_red";
-//    my_part.pose.position.x = 4.365789;
-//    my_part.pose.position.y = 1.173381;
-//    my_part.pose.position.z = 0.728011;
-//    my_part.pose.orientation.x = 0.012;
-//    my_part.pose.orientation.y = -0.004;
-//    my_part.pose.orientation.z = 0.002;
-//    my_part.pose.orientation.w = 1.000;
-//
-//    //--get pose of part in tray from /ariac/orders
-//    part part_in_tray;
-//    part_in_tray.type = "pulley_part_red";
-//    part_in_tray.pose.position.x = -0.12;
-//    part_in_tray.pose.position.x = -0.2;
-//    part_in_tray.pose.position.x = 0.0;
-//    part_in_tray.pose.orientation.x = 0.0;
-//    part_in_tray.pose.orientation.y = 0.0;
-//    part_in_tray.pose.orientation.z = 0.0;
-//    part_in_tray.pose.orientation.w = 1.0;
-
-    //--Go pick the part
-//    gantry.pickPart(my_part);
-    //--Go place the part
-//    gantry.placePart(part_in_tray, "agv2");
-
     gantry.goToPresetLocation(gantry.start_);
-    submitOrder(2, "order_0");
+    submitOrder(2, "order_0_shipment_0");
     ROS_INFO_STREAM("Mangathaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa DaWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
 
     comp.endCompetition();
