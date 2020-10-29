@@ -1,4 +1,4 @@
-# RWA_3
+# ARIAC Competition
 
 Picking and delivering parts in an industrial environment with faulty parts
 
