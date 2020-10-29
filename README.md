@@ -1,5 +1,7 @@
 # RWA_3
 
+Picking and delivering parts in an industrial environment with faulty parts
+
 ## Team members
 1. Pradeep Gopal
 2. Rajesh 
