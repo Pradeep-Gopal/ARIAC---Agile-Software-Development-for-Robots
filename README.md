@@ -11,7 +11,7 @@ Picking and delivering parts in an industrial environment with faulty parts
 
 ## Steps to Run the package
 
-1. Copy and paste the package in the /ariac_ws/src/rwa3_group1 directory
+1. git clone the package in the /ariac_ws/src/ directory and rename the package to rwa3_group1
 2. Open a terminal and type the following commands
 3. cd /ariac_ws
 4. catkin build rwa3_group1
