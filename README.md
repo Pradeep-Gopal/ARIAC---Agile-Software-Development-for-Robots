@@ -2,6 +2,11 @@
 
 Picking and delivering parts in an industrial environment with faulty parts
 
+## Results
+[Scenario 1](https://www.youtube.com/watch?v=Xu1gFQL5WeM&list=PL_HqcgW4roXofxZxdxJUef4rXWphtUOpH&index=1)
+[Scenario 2](https://www.youtube.com/watch?v=MJz2P6-rJoY&list=PL_HqcgW4roXofxZxdxJUef4rXWphtUOpH&index=2)
+[Scenario 2](https://youtu.be/T9MkpMUNcMY)
+
 ## Team members
 1. Pradeep Gopal
 2. Rajesh 
