@@ -22,6 +22,9 @@ Install Ariac package in your workspace using the steps mentioned in the followi
 
 [Ariac Installation Instructions](https://github.com/usnistgov/ARIAC/blob/master/wiki/tutorials/installation.md)
 
+
+Follow these instructions to run the package after installing ARIAC
+
 1. git clone the package in the /ariac_ws/src/ directory and rename the package to rwa3_group1
 2. Open a terminal and type the following commands
 3. cd /ariac_ws
