@@ -18,6 +18,9 @@ Picking and delivering parts in an industrial environment with faulty parts
 
 ## Steps to Run the package
 
+Install Ariac package in your workspace using the steps mentioned in the following link
+[Ariac Installation Instructions](https://github.com/usnistgov/ARIAC/blob/master/wiki/tutorials/installation.md)
+
 1. git clone the package in the /ariac_ws/src/ directory and rename the package to rwa3_group1
 2. Open a terminal and type the following commands
 3. cd /ariac_ws
