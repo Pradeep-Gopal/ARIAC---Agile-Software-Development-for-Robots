@@ -1,6 +1,6 @@
 # ARIAC Competition
 
-Picking and delivering parts in an industrial environment with faulty parts
+Picking and delivering parts in an industrial environment with faulty parts and parts with faulty pose which will be flipped by the robot before delivering it to the AGV
 
 ## Results
 [Scenario 1](https://www.youtube.com/watch?v=Xu1gFQL5WeM&list=PL_HqcgW4roXofxZxdxJUef4rXWphtUOpH&index=1)
